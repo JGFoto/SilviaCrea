@@ -318,13 +318,14 @@ button{cursor:pointer}
 @media(prefers-reduced-motion:reduce){.item-card.is-featured{animation:none;}}   
   
 .slider-wrapper {position: relative;width: 100%;}  
-.slider-btn {position: absolute;top: 50%;transform: translateY(-50%);background: var(--blue-pastel-soft);border: 1px solid var(--line);color: var(--lilac-dark);border-radius: 50%;width: 44px;height: 44px;display: flex;align-items: center;justify-content: center;box-shadow: 0 4px 14px rgba(107, 78, 117, 0.12);z-index: 10;cursor: pointer;font-size: 16px;transition: background 0.2s ease, transform 0.2s ease;}  
+.slider-btn {position: absolute;top: 50%;transform: translateY(-50%);background: var(--blue-pastel-soft);border: 1px solid var(--line);color: var(--lilac-dark);border-radius: 50%;width: 44px;height: 44px;display: flex;align-items: center; justify-content: center;box-shadow: 0 4px 14px rgba(107, 78, 117, 0.12);z-index: 10;cursor: pointer;font-size: 16px;transition: background 0.2s ease, transform 0.2s ease;}  
 .slider-btn:hover {background: var(--lilac-pale);transform: translateY(-50%) scale(1.05);}  
 .slider-btn-left {left: -22px;}  
 .slider-btn-right {right: -22px;}  
   
-.empty-btn-style{font-size: 13px;font-weight: 700;color: var(--pink-dark);margin-left: auto;margin-right: 12px;padding: 6px 12px;border-radius: 20px;border: 1px solid var(--pink);background: #fff;transition: background 0.2s, transform 0.2s;}  
-.empty-btn-style:hover{background: var(--lilac-pale);transform: translateY(-1px);}  
+/* El botón de Vaciar carrito forzado para que no lo modifique nada */
+.empty-btn-style{font-size: 13px !important; font-weight: 700 !important; color: var(--lilac-dark) !important; margin-left: auto !important; margin-right: 12px !important; padding: 6px 12px !important; border-radius: 20px !important; border: 1px solid #f0d5e1 !important; background: var(--pink-soft) !important; transition: background 0.2s, transform 0.2s !important;}  
+.empty-btn-style:hover{background: var(--lilac-pale) !important; transform: translateY(-1px) !important;}  
   
 .confirm-modal {position: relative;max-width: 380px;width: 90%;background: var(--blue-pastel-soft);border-radius: 24px;padding: 35px 25px;text-align: center;box-shadow: var(--shadow);border: 1px solid #c3d7f0;}  
 .confirm-modal h3 {font: 600 24px var(--serif);color: var(--lilac-dark);margin: 0 0 10px;}  
