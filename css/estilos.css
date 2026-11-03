@@ -5,13 +5,12 @@
 
 body{  
  margin:0;  
- background-color: #e8d9eb; /* Fondo intermedio para que resalten los detalles */
+ background-color: #f7effa;
  background-image: 
    var(--svg-emojis),
-   url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E"),
-   radial-gradient(circle at 10% 20%, rgba(118,91,137, 0.22), transparent 60%),
-   radial-gradient(circle at 85% 85%, rgba(191,120,149, 0.20), transparent 60%),
-   radial-gradient(circle at 50% 50%, rgba(200,175,225, 0.30), transparent 60%);
+   url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E"),
+   radial-gradient(circle at 15% 15%, rgba(220,185,235,0.4), transparent 50%),
+   radial-gradient(circle at 85% 85%, rgba(240,195,215,0.4), transparent 50%);
  background-attachment: fixed;  
  color:var(--ink);  
  font-family:var(--sans);  
@@ -161,23 +160,22 @@ button{cursor:pointer}
 .footer-links{display:flex;justify-content:center;gap:22px;font-size:12px;margin-bottom:15px}
 .site-footer small{font-size:11px}
 
-/* Destellos / Estrellitas (Background Sparkles) */
-.sparkles {position: fixed;inset: 0;pointer-events: none;z-index: -2;background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='1' transform='scale(0.18) translate(100, 200)'/%3E%3Cpath d='M200,50 L202,98 L250,100 L202,102 L200,150 L198,102 L150,100 L198,98 Z' fill='%23ffffff' opacity='0.85' transform='scale(0.2) translate(1500, 1200)'/%3E%3Cpath d='M200,50 L204,96 L250,100 L204,104 L200,150 L196,104 L150,100 L196,96 Z' fill='%23ffffff' opacity='0.9' transform='scale(0.12) translate(2800, 500)'/%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.75' transform='scale(0.16) translate(600, 2200)'/%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.9' transform='scale(0.14) translate(2200, 1800)'/%3E%3C/svg%3E");background-size: 320px 320px;animation: twinkle 4s ease-in-out infinite alternate;}
-@keyframes twinkle {0% { opacity: 0.2; transform:scale(0.95); } 100% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 6px rgba(255,255,255,0.8)); }}
-
-/* Mariposas animadas */
-.butterfly{position:fixed;z-index:-1;pointer-events:none;opacity:0.65;}
-.butterfly-inner{display:inline-block;font-size:24px;filter:drop-shadow(0 4px 6px rgba(107,78,117,0.25));transform-origin:center;animation:flap 0.8s ease-in-out infinite alternate;}
-@keyframes flap {0% { transform: scaleX(1) translateY(0px) rotate(-8deg); } 100% { transform: scaleX(0.15) translateY(-5px) rotate(8deg); }}
-.butterfly-one{animation:flyX1 45s linear infinite, flyY1 14s ease-in-out infinite alternate;}
-.butterfly-two{animation:flyX2 55s linear infinite, flyY2 18s ease-in-out infinite alternate; animation-delay:-15s;}
-.butterfly-three{animation:flyX3 65s linear infinite, flyY3 22s ease-in-out infinite alternate; animation-delay:-35s;}
-@keyframes flyX1 {0% { left: -10%; } 100% { left: 110%; }}
-@keyframes flyY1 {0% { top: 20%; } 100% { top: 40%; }}
-@keyframes flyX2 {0% { right: -10%; } 100% { right: 110%; }}
-@keyframes flyY2 {0% { top: 60%; } 100% { top: 85%; }}
-@keyframes flyX3 {0% { left: -10%; } 100% { left: 110%; }}
-@keyframes flyY3 {0% { top: 80%; } 100% { top: 50%; }}
+/* Destellos / Estrellitas (Background Sparkles mejorado y distanciado) */
+.sparkles, .sparkles::after {position: fixed;inset: 0;pointer-events: none;z-index: -2;background-size: 400px 400px;}
+.sparkles {
+    background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M0,-15 L2,-3 L15,0 L2,3 L0,15 L-2,3 L-15,0 L-2,-3 Z' transform='translate(80, 120) scale(0.9)'/%3E%3Cpath d='M0,-20 L2.5,-4 L20,0 L2.5,4 L0,20 L-2.5,4 L-20,0 L-2.5,-4 Z' transform='translate(320, 250) scale(0.6)'/%3E%3C/g%3E%3C/svg%3E");
+    animation: twinkle 3s ease-in-out infinite alternate;
+}
+.sparkles::after {
+    content: "";
+    background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M0,-12 L1.5,-2 L12,0 L1.5,2 L0,12 L-1.5,2 L-12,0 L-1.5,-2 Z' transform='translate(200, 60) scale(1.1)'/%3E%3Cpath d='M0,-18 L2,-3.5 L18,0 L2,3.5 L0,18 L-2,3.5 L-18,0 L-2,-3.5 Z' transform='translate(100, 340) scale(0.7)'/%3E%3C/g%3E%3C/svg%3E");
+    animation: twinkle 4.5s ease-in-out infinite alternate-reverse;
+    background-position: 50px 50px;
+}
+@keyframes twinkle {
+    0% { opacity: 0; filter: drop-shadow(0 0 0 rgba(255,255,255,0)); transform: scale(0.9); }
+    100% { opacity: 1; filter: drop-shadow(0 0 10px rgba(255,255,255,1)); transform: scale(1.2); }
+}
 
 .drawer-backdrop,.modal-backdrop{position:fixed;inset:0;background:rgba(48,36,53,.35);z-index:90;opacity:0;visibility:hidden;transition:.25s}
 .drawer-backdrop.open,.modal-backdrop.open{opacity:1;visibility:visible}
@@ -276,8 +274,6 @@ button{cursor:pointer}
  .fs-modal-close{right:12px; top:12px}
  .modal-copy{padding:25px}
  .modal-copy h2{font-size:25px}
- .butterfly{display:none}  
- .sparkles{display:none}
 }   
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}   
   
