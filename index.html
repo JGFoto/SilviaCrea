@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fbf5fb">
+  <meta name="description" content="Silvia Crea: arte, manualidades y creaciones personalizadas hechas a mano.">
+  <title>Inicio | Silvia Crea</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body data-page="home">
+
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Silvia Crea, inicio"><span class="brand-mark">✿</span><span><strong>Silvia Crea</strong><small>Arte y manualidades</small></span></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    <nav class="main-nav" aria-label="Navegación principal"><a href="index.html" aria-current="page">Inicio</a><a href="tienda.html" >Tienda</a><a href="galeria.html" >Galería</a><a href="sobre-mi.html" >Sobre mí</a><a href="encargos.html" >Encargos</a><a href="contacto.html" >Contacto</a></nav>
+    <button class="cart-trigger" type="button" data-open-cart aria-label="Abrir carrito">♡ <span>Carrito</span><b class="cart-count">0</b></button>
+  </div>
+</header>
+
+<main id="contenido">
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Hecho a mano, hecho con cariño</span>
+    <h1>Pequeñas creaciones,<br><em>grandes momentos.</em></h1>
+    <p>Bienvenida a Silvia Crea, un rincón donde las ideas se transforman en piezas únicas, hechas a mano y con mucho mimo.</p>
+    <div class="hero-actions"><a class="btn btn-primary" href="tienda.html">Descubrir la tienda</a><a class="btn btn-soft" href="galeria.html">Ver mis trabajos</a></div>
+  </div>
+  <div class="hero-art" aria-label="Ilustración decorativa artesanal"><span class="art-flower">✿</span><span class="art-butterfly">🦋</span><div class="art-card"><span>Silvia Crea</span><small>Arte y manualidades</small><b>♡</b></div><span class="art-spark">✧</span></div>
+</section>
+<section class="section intro-section">
+  <div class="section-heading"><span class="eyebrow">Un mundo creativo</span><h2>Creaciones con un toque especial</h2><p>Cada pieza nace de una idea y se prepara con dedicación para convertirse en algo tuyo.</p></div>
+  <div class="feature-grid">
+    <article class="feature-card"><span>🌷</span><h3>Artesanía</h3><p>Detalles elaborados a mano, con paciencia y cariño.</p></article>
+    <article class="feature-card"><span>🎀</span><h3>Personalización</h3><p>Colores, nombres y pequeños detalles para hacer cada encargo especial.</p></article>
+    <article class="feature-card"><span>💌</span><h3>Hecho para ti</h3><p>Cuéntame tu idea y veremos cómo darle forma juntas.</p></article>
+  </div>
+</section>
+<section class="section tinted">
+  <div class="section-heading"><span class="eyebrow">Un vistazo</span><h2>Mis especialidades</h2><p>Algunas de las técnicas y tipos de creación que encontrarás en Silvia Crea.</p></div>
+  <div id="specialties-grid" class="card-grid"><p class="loading-note">Cargando especialidades…</p></div>
+  <div class="center-action"><a class="btn btn-soft" href="sobre-mi.html">Conoce un poquito más</a></div>
+</section>
+<section class="section cta-band"><div><span class="eyebrow">¿Tienes una idea?</span><h2>Hagámosla realidad.</h2><p>Si buscas un detalle personalizado, estaré encantada de conocer tu propuesta.</p></div><a class="btn btn-primary" href="encargos.html">Consultar un encargo</a></section>
+
+</main>
+<footer class="site-footer"><a class="footer-brand" href="index.html">Silvia Crea <span>♡</span></a><p>Arte y manualidades hechas con cariño.</p><div class="footer-links"><a href="contacto.html">Contacto</a><a href="tienda.html">Tienda</a><a href="encargos.html">Encargos</a></div><small>© <span id="year"></span> Silvia Crea</small></footer>
+
+<div class="butterfly butterfly-one" aria-hidden="true">🦋</div><div class="butterfly butterfly-two" aria-hidden="true">🦋</div>
+<div class="drawer-backdrop" data-close-cart></div>
+<aside class="cart-drawer" aria-label="Carrito" aria-hidden="true">
+  <div class="drawer-head"><div><span class="eyebrow">Tus favoritos</span><h2>Mi carrito</h2></div><button type="button" class="icon-button" data-close-cart aria-label="Cerrar carrito">×</button></div>
+  <div id="cart-items" class="cart-items"><p class="empty-cart">Todavía no has añadido productos.</p></div>
+  <div class="cart-summary"><div class="summary-line"><span>Unidades</span><strong id="cart-units">0</strong></div><div class="summary-line total-line"><span>Total estimado</span><strong id="cart-total">0,00 €</strong></div><p>Los gastos de envío se concretarán personalmente. El envío de la solicitud no implica ningún pago.</p><button type="button" class="btn btn-primary full-width" id="continue-order">Continuar con la solicitud</button></div>
+</aside>
+<div class="modal-backdrop" id="product-modal" aria-hidden="true"><div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="icon-button modal-close" data-close-modal aria-label="Cerrar">×</button><img id="modal-image" alt=""><div class="modal-copy"><span class="eyebrow">Silvia Crea</span><h2 id="modal-title"></h2><p id="modal-description"></p><strong id="modal-price"></strong><button type="button" class="btn btn-primary" id="modal-add">Añadir al carrito</button></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="js/config.js"></script><script src="js/app.js"></script>
+</body></html>
