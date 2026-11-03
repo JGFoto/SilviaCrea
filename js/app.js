@@ -1,6 +1,7 @@
 (() => {  
  const cfg = window.SILVIA_CONFIG || {};  
- const $ = (s, root=document) => root.querySelector(s); const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
+ const $ = (s, root=document) => root.querySelector(s);  
+ const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
  const CART_KEY = "silviacrea_cart_v2";  
  let products = [], specialties = [], gallery = [], cart = loadCart(), modalProduct = null, toastTimer;  
   
@@ -29,7 +30,9 @@
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));  
  function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||"[]").filter(x=>x&&x.name&&Number(x.price)>=0&&Number(x.qty)>0);}catch{return[];}}  
  function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart));}catch{}}  
- function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);} function updateCart(){ $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
+ function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);}  
+ function updateCart(){  
+ $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
  const items=$("#cart-items"); if(!items)return;  
  if(!cart.length){items.innerHTML='<p class="empty-cart">Todavía no has añadido productos.</p>';}  
  else items.innerHTML=cart.map((x,i)=>`<div class="cart-row"><div class="cart-row-top"><div><strong>${esc(x.name)}</strong><br><small>${euro(x.price)} / unidad</small></div><b>${euro(x.price*x.qty)}</b></div><div class="cart-row-controls"><button data-qty="-1" data-index="${i}" aria-label="Restar">−</button><span>${x.qty}</span><button data-qty="1" data-index="${i}" aria-label="Sumar">+</button><button data-remove="${i}">Eliminar</button></div><textarea data-comment="${i}" rows="2" placeholder="Personalización o comentario…">${esc(x.comment||"")}</textarea></div>`).join("");  
@@ -103,7 +106,7 @@
    
    return `<article class="${classes}" data-card-kind="${kind}" data-index="${index}" tabindex="0" role="group" aria-label="${esc(p.name||p.title)}. Pulsa para ver el detalle">  
    ${featured}${offer}  
-   ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true">✿</div>`}  
+   ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true">📷</div>`}  
    <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>  
    ${isProduct?`<div class="item-meta">${price}</div><div class="stock-notice">${p.stock>0&&p.stock<=5?'<small class="low-stock">Pocas unidades</small>':''}</div>`:''}  
    <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>  
@@ -112,6 +115,8 @@
  async function loadProducts(){  
  const rows=await getSheet("CATALOGO");  
  products=rows.filter(r=>val(r,0)).map(r=>({name:val(r,0),description:val(r,1),price:money(val(r,2)),image:val(r,3),stock:val(r,4)===""?99:Math.max(0,parseInt(val(r,4),10)||0),detail:val(r,5),largeImage:val(r,6),featured:yes(val(r,7)),offer:yes(val(r,8)),offerPrice:val(r,9)===""?undefined:money(val(r,9))}));  
+ // Ordenar para que los destacados salgan primero
+ products.sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
  const grid=$("#products-grid");if(grid){grid.innerHTML=products.length?products.map((p,i)=>card(p,"product",i)).join(""):'<p class="loading-note">Todavía no hay productos disponibles.</p>';prepareSlider(grid,products.length);}  
  }  
  async function loadSpecialties(){  
