@@ -26,7 +26,7 @@
 <main id="contenido">
 <section class="hero">
  <div class="hero-copy">
- <span class="eyebrow" style="margin-bottom: -5px;">Hecho a mano, hecho con cariño</span>
+ <span class="eyebrow" style="margin-bottom: -5px; font-size: 15px;">Hecho a mano, hecho con cariño</span>
  <h1>Pequeñas creaciones,<br><em>grandes momentos.</em></h1>
  <p>Te damos la bienvenida a Silvia Crea: un rincón donde las ideas se transforman en piezas únicas, hechas a mano y con mucho mimo.</p>
  <div class="hero-actions"><a class="btn btn-primary" href="tienda.html">Descubrir la tienda</a><a class="btn btn-soft" href="galeria.html">Ver mis trabajos</a></div>
@@ -34,7 +34,7 @@
  <div class="hero-art" aria-label="Ilustración decorativa artesanal"><span class="art-flower">✿</span><span class="art-butterfly">🦋</span><img src="https://i.imgur.com/F84jcJa.png" alt="Logotipo Silvia Crea" class="hero-logo"><span class="art-spark">✧</span></div>
 </section>
 <section class="section intro-section">
- <div class="section-heading"><span class="eyebrow">Un mundo creativo</span><h2>Creaciones con un toque especial</h2><p>Cada pieza nace de una idea y se prepara con dedicación para convertirse en algo tuyo.</p></div>
+ <div class="section-heading"><span class="eyebrow" style="font-size: 14.5px;">Un mundo creativo</span><h2>Creaciones con un toque especial</h2><p>Cada pieza nace de una idea y se prepara con dedicación para convertirse en algo tuyo.</p></div>
  <div class="feature-grid">
  <article class="feature-card"><span>🌷</span><h3>Artesanía</h3><p>Detalles elaborados a mano, con paciencia y cariño.</p></article>
  <article class="feature-card"><span>🎀</span><h3>Personalización</h3><p>Colores, nombres y pequeños detalles para hacer cada encargo especial.</p></article>
@@ -42,7 +42,7 @@
  </div>
 </section>
 <section class="section tinted">
- <div class="section-heading"><span class="eyebrow">Un vistazo</span><h2>Mis especialidades</h2><p>Algunas de las técnicas y tipos de creación que encontrarás en Silvia Crea.</p></div>
+ <div class="section-heading"><span class="eyebrow" style="font-size: 14.5px;">Un vistazo</span><h2>Mis especialidades</h2><p>Algunas de las técnicas y tipos de creación que encontrarás en Silvia Crea.</p></div>
  <div id="specialties-grid" class="card-grid"><p class="loading-note">Cargando especialidades…</p></div>
  <div class="center-action"><a class="btn btn-soft" href="sobre-mi.html">Conoce un poquito más</a></div>
 </section>
@@ -59,7 +59,11 @@
  <small>© <span id="year"></span> Silvia Crea</small>
 </footer>
 
-<div class="butterfly butterfly-one" aria-hidden="true">🦋</div><div class="butterfly butterfly-two" aria-hidden="true">🦋</div>
+<div class="sparkles" aria-hidden="true"></div>
+<div class="butterfly butterfly-1" aria-hidden="true"><span class="butterfly-inner">🦋</span></div>
+<div class="butterfly butterfly-2" aria-hidden="true"><span class="butterfly-inner" style="transform: scaleX(-1);">🦋</span></div>
+<div class="butterfly butterfly-3" aria-hidden="true"><span class="butterfly-inner">🦋</span></div>
+
 <div class="drawer-backdrop" data-close-cart></div>
 <aside class="cart-drawer" aria-label="Carrito" aria-hidden="true">
  <div class="drawer-head"><div><span class="eyebrow">Tus favoritos</span><h2>Mi carrito</h2></div><button type="button" class="icon-button" data-close-cart aria-label="Cerrar carrito">×</button></div>
@@ -69,10 +73,13 @@
 <div class="modal-backdrop" id="product-modal" aria-hidden="true">
   <div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <button type="button" class="icon-button modal-close" data-close-modal aria-label="Cerrar">×</button>
-    <div class="modal-image-container">
+    <div class="modal-image-container" id="modal-img-wrapper" tabindex="0" role="button" aria-label="Ampliar imagen">
       <img id="modal-image" alt="">
       <div id="modal-placeholder" class="placeholder" aria-hidden="true" style="display:none;">
         <svg viewBox="0 0 24 24" width="60" height="60" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      </div>
+      <div class="zoom-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </div>
     </div>
     <div class="modal-copy">
@@ -84,6 +91,15 @@
     </div>
   </div>
 </div>
+
+<div class="fs-modal-backdrop" id="fs-modal" aria-hidden="true">
+  <button type="button" class="icon-button fs-modal-close" data-close-fs aria-label="Cerrar imagen">×</button>
+  <div class="fs-modal-content">
+    <img id="fs-modal-image" alt="">
+    <div class="fs-watermark"></div>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/config.js"></script><script src="js/app.js"></script>
 </body></html>
