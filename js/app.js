@@ -69,7 +69,7 @@
     let price="";
     if(isProduct){
       if(p.stock<=0) price='<span class="stock-out">Agotado</span>';
-      else price=`<span class="price">${p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del><strong class="offer-price">${euro(p.offerPrice)}</strong>`:euro(p.price)}${p.stock<=5?'<small class="low-stock">Pocas unidades</small>':""}</span>`;
+      else price=`<span class="price">${p.stock<=5?'<small class="low-stock">Pocas unidades</small>':""}<strong class="current-price ${p.offer&&p.offerPrice!==undefined?'offer-price':''}">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong>${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}</span>`;
     }
     const featured=p.featured?'<span class="featured-label">Destacado</span>':'';
     const offer=isProduct&&p.offer?'<span class="offer-label">Oferta</span>':'';
@@ -138,7 +138,7 @@
     const cardEl=e.target.closest("[data-card-kind]");
     if(!cardEl)return;
     activeDrag={grid,card:cardEl,startX:e.clientX,startY:e.clientY,lastX:e.clientX,dragging:false};
-    try{cardEl.setPointerCapture(e.pointerId);}catch{}
+    try{grid.setPointerCapture(e.pointerId);}catch{}
   },{passive:true});
   document.addEventListener("pointermove",e=>{
     if(!activeDrag)return;
