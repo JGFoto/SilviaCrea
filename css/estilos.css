@@ -4,3 +4,31 @@
 @media(max-width:900px){.header-inner{gap:12px}.brand{min-width:170px}.main-nav{gap:12px}.main-nav a{font-size:12px}.hero{min-height:500px}.card-grid,.product-grid,.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.header-inner{padding:10px 16px;justify-content:space-between}.brand{min-width:0}.menu-toggle{display:block;order:3}.cart-trigger{margin-left:auto;padding:8px 11px}.cart-trigger span{display:none}.main-nav{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(255,250,253,.98);padding:15px 22px 22px;border-bottom:1px solid var(--line);box-shadow:var(--shadow);flex-direction:column;align-items:stretch;gap:0}.main-nav.open{display:flex}.main-nav a{padding:10px 3px;font-size:14px}.main-nav a[aria-current=page]:after{display:none}.hero{grid-template-columns:1fr;padding:60px 24px 35px;gap:10px;text-align:center}.hero-copy>p{margin:0 auto}.hero-actions{justify-content:center}.hero-art{height:300px}.art-card{height:240px}.art-card span{font-size:42px}.art-flower{font-size:50px}.section{padding:55px 20px}.feature-grid,.order-steps{grid-template-columns:1fr}.card-grid,.product-grid,.gallery-grid{grid-template-columns:1fr}.item-card{max-width:480px;width:100%;margin:auto}.shop-toolbar{align-items:flex-start;flex-direction:column}.cta-band{margin:0 18px 50px;display:block;text-align:center;padding:30px 22px}.cta-band .btn{margin-top:20px}.about-layout,.contact-layout{grid-template-columns:1fr;gap:28px}.about-art{min-height:270px;max-width:430px;width:100%;margin:auto}.page-hero{padding:58px 20px 30px}.contact-card,.form-card{padding:25px}.product-modal{grid-template-columns:1fr;max-height:90dvh;overflow:auto}.product-modal>img{height:220px;min-height:0}.modal-copy{padding:25px}.modal-copy h2{font-size:25px}.butterfly{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Carruseles de especialidades, tienda y galería */
+.card-grid.has-slider,.product-grid.has-slider,.gallery-grid.has-slider{display:flex;flex-wrap:nowrap;justify-content:flex-start;gap:24px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#cbb4d7 #f3edf5;padding:12px 4px 18px;}
+.card-grid.is-centered,.product-grid.is-centered,.gallery-grid.is-centered{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;overflow:visible;padding:12px 4px 18px;}
+.card-grid.has-slider .item-card,.product-grid.has-slider .item-card,.gallery-grid.has-slider .item-card{flex:0 0 calc((100% - 48px)/3);min-width:260px;max-width:none;scroll-snap-align:start;margin:0;}
+.card-grid.is-centered .item-card,.product-grid.is-centered .item-card,.gallery-grid.is-centered .item-card{flex:0 1 calc((100% - 48px)/3);min-width:260px;max-width:360px;margin:0;}
+.item-card{position:relative;cursor:pointer;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;}
+.item-card:hover{transform:translateY(-4px);box-shadow:0 14px 34px rgba(107,78,117,.13);}
+.item-card:focus-visible{outline:3px solid #b99acb;outline-offset:4px;}
+.item-card .item-bottom{justify-content:center;flex-wrap:wrap;gap:9px;}
+.item-card .detail-link{display:inline-flex;align-items:center;justify-content:center;margin-inline:auto;}
+.item-card.is-featured{border:2px solid #c9a9df;animation:featuredPulse 2.8s ease-in-out infinite;}
+.featured-label{position:absolute;z-index:3;top:12px;left:12px;padding:6px 11px;border-radius:20px;background:#eadcf3;color:#76538a;font-size:11px;font-weight:700;letter-spacing:.02em;box-shadow:0 3px 10px rgba(90,65,105,.10);}
+@keyframes featuredPulse{0%,100%{box-shadow:0 0 0 0 rgba(190,157,213,.16)}50%{box-shadow:0 0 0 6px rgba(190,157,213,.12)}}
+.item-card.is-offer{border:2px solid #edbd91;}
+.price{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;}
+.price del,.modal-copy strong del{color:#958b98;font-size:.9em;font-weight:500;}
+.offer-price,.modal-copy strong span{color:#c87539;}
+.low-stock{display:inline-block;color:#a66a3d;background:#fff0e3;border-radius:20px;padding:4px 8px;font-size:10px;font-weight:700;}
+.stock-out{color:#a44d60;font-size:13px;font-weight:700;}
+.add-button{border:0;cursor:pointer;}
+.add-button:disabled{opacity:.45;cursor:not-allowed;}
+.shop-toolbar{justify-content:flex-end;align-items:center;}
+#modal-price{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+@media(max-width:900px){.card-grid.has-slider .item-card,.product-grid.has-slider .item-card,.gallery-grid.has-slider .item-card{flex-basis:calc((100% - 24px)/2);}.card-grid.is-centered .item-card,.product-grid.is-centered .item-card,.gallery-grid.is-centered .item-card{flex-basis:calc((100% - 24px)/2);}}
+@media(max-width:700px){.card-grid.has-slider,.product-grid.has-slider,.gallery-grid.has-slider{gap:16px;}.card-grid.has-slider .item-card,.product-grid.has-slider .item-card,.gallery-grid.has-slider .item-card{flex:0 0 min(82%,360px);min-width:0;}.card-grid.is-centered .item-card,.product-grid.is-centered .item-card,.gallery-grid.is-centered .item-card{flex:0 1 min(100%,420px);min-width:0;}.item-card .item-bottom{justify-content:center;}}
+@media(prefers-reduced-motion:reduce){.item-card.is-featured{animation:none;}}
