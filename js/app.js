@@ -49,8 +49,8 @@ function openProduct(p,isProduct=false,idx=0){
   $("#modal-description").textContent=p.detail||p.description||p.desc||"";   
   const priceEl=$("#modal-price");   
   if(isProduct){   
-  priceEl.innerHTML=p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del> <span>${euro(p.offerPrice)}</span>`:euro(p.price);   
-  priceEl.style.display="block";   
+  priceEl.innerHTML=p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del> <span>${euro(p.offerPrice)}</span>`: `<span>${euro(p.price)}</span>`;   
+  priceEl.style.display="flex";   
   $("#modal-add").style.display=p.stock>0?"inline-flex":"none";   
   }else{priceEl.textContent="";priceEl.style.display="none";$("#modal-add").style.display="none";}   
   
@@ -106,7 +106,7 @@ const isProduct=kind==="product";
 let price="";   
 if(isProduct){   
 if(p.stock<=0) price='<span class="stock-out">Agotado</span>';   
-else price=`<span class="price"><strong class="current-price ${p.offer&&p.offerPrice!==undefined?'offer-price':''}">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong>${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}</span>`;   
+else price=`<div class="price">${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}<strong class="current-price">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong></div>`;   
 }   
 const featured=p.featured?'<span class="featured-label">Destacado</span>':'';   
 const offer=isProduct&&p.offer?'<span class="offer-label">Oferta</span>':'';   
@@ -116,7 +116,7 @@ return `<article class="${classes}" data-card-kind="${kind}" data-index="${index
 ${featured}${offer}   
 ${image?`<div class="image-wrapper"><img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false"></div>`:`<div class="image-wrapper"><div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div></div>`}   
 <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>   
-${isProduct?`<div class="item-meta">${price}</div><div class="stock-notice">${p.stock>0&&p.stock<=5?'<small class="low-stock">Pocas unidades</small>':''}</div>`:''}   
+${isProduct?`<div class="item-meta">${price}<div class="stock-notice">${p.stock>0&&p.stock<=5?'<span class="low-stock">Pocas unidades</span>':''}</div></div>`:''}   
 <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir carrito</button>`:''}</div>   
 </div></article>`;   
 }   
@@ -247,7 +247,6 @@ if(cardEl&&!e.target.closest("button")){
  return;  
  }   
 
-// Lógica para abrir imagen a pantalla completa (Modal 2)
 if(e.target.closest("#modal-img-wrapper")) {
    const img = $("#modal-image");
    if(img && img.src && img.style.display !== "none") {
@@ -264,7 +263,6 @@ if(e.target.closest("#modal-img-wrapper")) {
    }
 }
 
-// Lógica para cerrar la imagen a pantalla completa (Modal 2)
 if(e.target.closest("[data-close-fs]") || e.target.id === "fs-modal") {
    $("#fs-modal")?.classList.remove("open");
    $("#fs-modal")?.setAttribute("aria-hidden", "true");
