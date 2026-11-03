@@ -39,7 +39,6 @@
  const units=cart.reduce((n,x)=>n+x.qty,0), total=cart.reduce((n,x)=>n+x.qty*x.price,0);  
  $("#cart-units").textContent=units; $("#cart-total").textContent=euro(total);  
  saveCart();
- // Mostrar u ocultar el botón de vaciar carrito
  const emptyBtn = $("#empty-cart-btn");
  if(emptyBtn) emptyBtn.style.display = cart.length ? "block" : "none";
  }  
@@ -151,7 +150,7 @@
        if(cart.length > 0) {
          const backdrop = document.createElement("div");
          backdrop.className = "modal-backdrop open";
-         backdrop.style.zIndex = "200"; // Aseguramos que sale por encima del carrito
+         backdrop.style.zIndex = "200";
          backdrop.innerHTML = `<div class="confirm-modal" role="dialog" aria-modal="true">
            <h3>¿Vaciar carrito?</h3>
            <p>Se eliminarán todos los productos que has añadido.</p>
@@ -187,7 +186,6 @@
  const name=$("#customer-name")?.value.trim(),email=$("#customer-email")?.value.trim(),phone=$("#customer-phone")?.value.trim(),address=$("#customer-address")?.value.trim(),comment=$("#customer-comment")?.value.trim();  
  if(!name||!email||!phone||!address){showToast("Completa los datos obligatorios.");return;}  
  
- // Validación de Correo y Teléfono en JS por si el navegador omite el HTML5
  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  if(!emailRegex.test(email)){showToast("Por favor, introduce un correo electrónico válido.");return;}
  const cleanPhone = phone.replace(/\D/g,"");
@@ -210,38 +208,22 @@
  }finally{btn.disabled=false;btn.textContent="Enviar solicitud de pedido";}  
  }  
  
- // Lógica de Arrastre Corregida (Ignora pantallas táctiles para no bloquear el deslizamiento nativo del móvil)
- let activeDrag=null, suppressSliderClickUntil=0;  
- document.addEventListener("pointerdown",e=>{  
- if(e.pointerType !== "mouse") return; // CRÍTICO: Permite que el móvil deslice de forma nativa y perfecta
- const grid=e.target.closest(".has-slider");  
- if(!grid||e.button!==0||e.target.closest("button,a,input,textarea,select"))return;  
- const cardEl=e.target.closest("[data-card-kind]");  
- if(!cardEl)return;  
- activeDrag={grid,card:cardEl,startX:e.clientX,startY:e.clientY,lastX:e.clientX,dragging:false};  
- try{grid.setPointerCapture(e.pointerId);}catch{}  
- },{passive:true});  
- document.addEventListener("pointermove",e=>{  
- if(e.pointerType !== "mouse" || !activeDrag) return;  
- const dx=e.clientX-activeDrag.startX,dy=e.clientY-activeDrag.startY;  
- if(!activeDrag.dragging&&Math.abs(dx)>6&&Math.abs(dx)>Math.abs(dy)*1.15)activeDrag.dragging=true;  
- if(activeDrag.dragging){activeDrag.grid.scrollLeft-=e.clientX-activeDrag.lastX;e.preventDefault();}  
- activeDrag.lastX=e.clientX;  
- },{passive:false});  
- const finishSliderDrag=()=>{if(activeDrag?.dragging)suppressSliderClickUntil=Date.now()+350;activeDrag=null;};  
- document.addEventListener("pointerup",finishSliderDrag,{passive:true});  
- document.addEventListener("pointercancel",finishSliderDrag,{passive:true});  
- document.addEventListener("click",e=>{  
- if(Date.now()<suppressSliderClickUntil&&e.target.closest(".has-slider")){e.preventDefault();e.stopImmediatePropagation();return;}  
- },true);  
+ // Lógica de clics universal en la web (sin secuestro de clics por el arrastre antiguo)
  document.addEventListener("click",e=>{  
  if(e.target.closest("[data-open-cart]"))openCart();  
  if(e.target.closest("[data-close-cart]"))closeCart();  
  const add=e.target.closest("[data-add]");if(add){e.stopPropagation();addProduct(products[Number(add.dataset.add)]);return;}  
  const detail=e.target.closest("[data-detail-card]");  
  if(detail){const i=Number(detail.dataset.index),kind=detail.dataset.detailCard;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");return;}  
+ 
+ // Al hacer clic en cualquier lugar de la tarjeta que no sea un botón, abrimos el modal
  const cardEl=e.target.closest("[data-card-kind]");  
- if(cardEl&&!e.target.closest("button")){const i=Number(cardEl.dataset.index),kind=cardEl.dataset.cardKind;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");return;}  
+ if(cardEl&&!e.target.closest("button")){
+   const i=Number(cardEl.dataset.index),kind=cardEl.dataset.cardKind;
+   openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");
+   return;
+ }  
+ 
  const qty=e.target.closest("[data-qty]");if(qty){const item=cart[Number(qty.dataset.index)];item.qty=Math.max(1,item.qty+Number(qty.dataset.qty));const p=products.find(x=>x.name===item.name);if(p)item.qty=Math.min(item.qty,p.stock);updateCart();}  
  const rem=e.target.closest("[data-remove]");if(rem){cart.splice(Number(rem.dataset.remove),1);updateCart();}  
  if(e.target.closest("[data-close-modal]")||e.target.id==="product-modal")closeProduct();  
