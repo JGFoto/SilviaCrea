@@ -1,6 +1,7 @@
 (() => {  
  const cfg = window.SILVIA_CONFIG || {};  
- const $ = (s, root=document) => root.querySelector(s); const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
+ const $ = (s, root=document) => root.querySelector(s);  
+ const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
  const CART_KEY = "silviacrea_cart_v2";  
  let products = [], specialties = [], gallery = [], cart = loadCart(), modalProduct = null, toastTimer;  
   
@@ -29,7 +30,9 @@
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));  
  function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||"[]").filter(x=>x&&x.name&&Number(x.price)>=0&&Number(x.qty)>0);}catch{return[];}}  
  function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart));}catch{}}  
- function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);} function updateCart(){ $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
+ function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);}  
+ function updateCart(){  
+ $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
  const items=$("#cart-items"); if(!items)return;  
  if(!cart.length){items.innerHTML='<p class="empty-cart">Todavía no has añadido productos.</p>';}  
  else items.innerHTML=cart.map((x,i)=>`<div class="cart-row"><div class="cart-row-top"><div><strong>${esc(x.name)}</strong><br><small>${euro(x.price)} / unidad</small></div><b>${euro(x.price*x.qty)}</b></div><div class="cart-row-controls"><button data-qty="-1" data-index="${i}" aria-label="Restar">−</button><span>${x.qty}</span><button data-qty="1" data-index="${i}" aria-label="Sumar">+</button><button data-remove="${i}">Eliminar</button></div><textarea data-comment="${i}" rows="2" placeholder="Personalización o comentario…">${esc(x.comment||"")}</textarea></div>`).join("");  
@@ -246,7 +249,7 @@
  $("#continue-order")?.addEventListener("click",()=>{  
  if(!cart.length){showToast("Añade algún producto primero.");return;}  
  const drawer=$(".cart-drawer");drawer.innerHTML=`<div class="drawer-head"><div><span class="eyebrow">Un último paso</span><h2>Datos de tu solicitud</h2></div><button type="button" class="icon-button" data-close-cart aria-label="Cerrar">×</button></div>  
- <form id="order-form" class="form-card" style="overflow:auto;margin-top:15px;padding:20px"><label>Nombre *<input id="customer-name" required autocomplete="name"></label><label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email" placeholder="ejemplo@correo.com"></label><label>Teléfono (9 dígitos) *<input id="customer-phone" required inputmode="numeric" pattern="[0-9]{9}" title="El teléfono debe tener exactamente 9 dígitos" autocomplete="tel"></label><label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address"></textarea></label><label>Comentario general<textarea id="customer-comment" rows="3"></textarea></label><p class="small-note">El importe mostrado es estimado y no incluye los gastos de envío. En esta etapa no se realizará ningún cargo; Silvia contactará contigo para confirmar los detalles y el importe definitivo.<br><br><strong style="color:var(--pink-dark)">Nota importante:</strong> Actualmente solo realizamos envíos dentro de la Península.</p><button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button></form>`;  
+ <form id="order-form" class="form-card" style="overflow:auto;margin-top:15px;padding:20px"><label>Nombre *<input id="customer-name" required autocomplete="name"></label><label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email"></label><label>Teléfono *<input id="customer-phone" required inputmode="numeric" pattern="[0-9]{9}" maxlength="9" oninput="this.value=this.value.replace(/[^0-9]/g,'')" title="El teléfono debe tener exactamente 9 dígitos" autocomplete="tel"></label><label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address"></textarea></label><label>Comentario general<textarea id="customer-comment" rows="3"></textarea></label><p class="small-note">El importe mostrado es estimado y no incluye los gastos de envío. En esta etapa no se realizará ningún cargo; Silvia contactará contigo para confirmar los detalles y el importe definitivo.<br><br><strong style="color:var(--pink-dark)">Nota importante:</strong> Actualmente solo realizamos envíos dentro de la Península.</p><button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button></form>`;  
  $("#order-form").addEventListener("submit",e=>{e.preventDefault();sendOrder();});  
  });  
  $("#contact-form")?.addEventListener("submit",sendContact);  
