@@ -1,26 +1,29 @@
 (() => {
-// --- SISTEMA DE MEMORIA PARA RECARGAS (Soluciona el reseteo de Google Sites) ---
+// --- SISTEMA DE MEMORIA AVANZADO PARA GOOGLE SITES ---
 const pageMap = {'home': 'index.html', 'shop': 'tienda.html', 'gallery': 'galeria.html', 'about': 'sobre-mi.html', 'orders': 'encargos.html', 'contact': 'contacto.html'};
-const currentFile = pageMap[document.body.dataset.page] || 'index.html';
-const savedPage = sessionStorage.getItem('silviacrea_last_page');
+const actualPage = document.body.dataset.page;
+const currentHtml = pageMap[actualPage] || 'index.html';
+const savedHtml = sessionStorage.getItem('silviacrea_current_page');
 
-let navType = "";
-if (window.performance && performance.getEntriesByType) {
+let isBackForward = false;
+if (window.performance) {
     const navEntries = performance.getEntriesByType("navigation");
-    if (navEntries.length > 0) navType = navEntries[0].type;
-    else if (performance.navigation && performance.navigation.type === 2) navType = "back_forward";
+    if (navEntries.length > 0 && navEntries[0].type === "back_forward") isBackForward = true;
+    else if (performance.navigation && performance.navigation.type === 2) isBackForward = true;
 }
 
-// Si es una recarga (no se ha usado el botón de ir atrás), comprobamos la memoria
-if (navType !== "back_forward") {
-    if (savedPage && savedPage !== currentFile) {
-        window.location.replace(savedPage);
-        return; // Detenemos la ejecución para redirigir al instante
-    }
+if (isBackForward) {
+    // Si usó el botón Atrás/Adelante, aceptamos la página y actualizamos memoria
+    sessionStorage.setItem('silviacrea_current_page', currentHtml);
+} else if (savedHtml && savedHtml !== currentHtml && currentHtml === 'index.html') {
+    // Si Google Sites nos ha devuelto a la fuerza a index.html (por un F5), volvemos a donde estábamos
+    window.location.replace(savedHtml);
+    return; // Detenemos la ejecución de esta página porque ya nos vamos
+} else {
+    // Navegación normal
+    sessionStorage.setItem('silviacrea_current_page', currentHtml);
 }
-// Guardamos la página actual para futuras recargas
-sessionStorage.setItem('silviacrea_last_page', currentFile);
-// --------------------------------------------------------------------------------
+// -----------------------------------------------------
 
 const cfg = window.SILVIA_CONFIG || {};   
 const $ = (s, root=document) => root.querySelector(s); const $$ = (s, root=document) => [...root.querySelectorAll(s)];   
@@ -271,7 +274,7 @@ const link = e.target.closest("a");
 if (link) {
     const href = link.getAttribute("href");
     if (href && href.includes(".html") && !href.startsWith("http")) {
-        sessionStorage.setItem("silviacrea_last_page", href);
+        sessionStorage.setItem("silviacrea_current_page", href);
     }
 }
 
