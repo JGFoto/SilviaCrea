@@ -49,7 +49,7 @@ function openProduct(p,isProduct=false,idx=0){
   $("#modal-description").textContent=p.detail||p.description||p.desc||"";   
   const priceEl=$("#modal-price");   
   if(isProduct){   
-  priceEl.innerHTML=p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del> <span>${euro(p.offerPrice)}</span>`: `<span>${euro(p.price)}</span>`;   
+  priceEl.innerHTML=p.offer&&p.offerPrice!==undefined?`<div class="old-price-box"><del>${euro(p.price)}</del></div><div class="current-price-box"><strong>${euro(p.offerPrice)}</strong></div>`: `<div class="old-price-box"></div><div class="current-price-box"><strong>${euro(p.price)}</strong></div>`;   
   priceEl.style.display="flex";   
   $("#modal-add").style.display=p.stock>0?"inline-flex":"none";   
   }else{priceEl.textContent="";priceEl.style.display="none";$("#modal-add").style.display="none";}   
@@ -103,10 +103,19 @@ btnLeft.addEventListener("click", () => {
 function card(p,kind,index){   
 const image=safeImg(p.image), desc=p.description||p.desc||"";   
 const isProduct=kind==="product";   
-let price="";   
+let metaHtml="";   
 if(isProduct){   
-if(p.stock<=0) price='<span class="stock-out">Agotado</span>';   
-else price=`<div class="price">${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}<strong class="current-price">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong></div>`;   
+  const hasOffer = p.offer&&p.offerPrice!==undefined;
+  const lowStock = p.stock>0&&p.stock<=5;
+  const isOut = p.stock<=0;
+  
+  metaHtml = `<div class="item-meta">
+      <div class="price-wrapper">
+          <div class="old-price-box">${(hasOffer && !isOut) ? `<del>${euro(p.price)}</del>` : ''}</div>
+          <div class="current-price-box">${isOut ? '<span class="stock-out">Agotado</span>' : `<strong>${euro(hasOffer?p.offerPrice:p.price)}</strong>`}</div>
+      </div>
+      <div class="stock-box">${(lowStock && !isOut) ? '<span class="low-stock">Pocas unidades</span>' : ''}</div>
+  </div>`;
 }   
 const featured=p.featured?'<span class="featured-label">Destacado</span>':'';   
 const offer=isProduct&&p.offer?'<span class="offer-label">Oferta</span>':'';   
@@ -116,7 +125,7 @@ return `<article class="${classes}" data-card-kind="${kind}" data-index="${index
 ${featured}${offer}   
 ${image?`<div class="image-wrapper"><img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false"></div>`:`<div class="image-wrapper"><div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div></div>`}   
 <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>   
-${isProduct?`<div class="item-meta">${price}<div class="stock-notice">${p.stock>0&&p.stock<=5?'<span class="low-stock">Pocas unidades</span>':''}</div></div>`:''}   
+${metaHtml}
 <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir carrito</button>`:''}</div>   
 </div></article>`;   
 }   
