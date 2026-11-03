@@ -56,9 +56,8 @@ button{cursor:pointer}
 .hero-art{height:390px;position:relative;display:grid;place-items:center}
 .hero-logo{max-width:340px;width:85%;height:auto;filter:drop-shadow(0 15px 35px rgba(107,78,117,0.15));transform:rotate(2deg);transition:transform 0.4s ease;position:relative;z-index:2}
 .hero-logo:hover{transform:rotate(-1deg) scale(1.03)}
-.art-flower,.art-butterfly,.art-spark{position:absolute;color:var(--pink-dark);font-size:70px;z-index:1}
+.art-flower,.art-spark{position:absolute;color:var(--pink-dark);font-size:70px;z-index:1}
 .art-flower{top:10px;left:5%}
-.art-butterfly{right:3%;top:50px;font-size:45px}
 .art-spark{bottom:12px;right:15%;font-size:45px}
 .section{padding:76px 24px;max-width:1180px;margin:auto}
 .section-heading{text-align:center;max-width:680px;margin:0 auto 38px}
@@ -133,9 +132,8 @@ button{cursor:pointer}
 .about-art{min-height:370px;border-radius:45% 45% 35% 35%;background:linear-gradient(145deg,#f0e4f3,#fff0f2);position:relative;display:grid;place-items:center}
 .about-note{font:600 48px/1.05 var(--script);color:var(--lilac-dark);text-align:center;transform:rotate(-7deg)}
 .about-note em{color:var(--pink-dark)}
-.about-flower,.about-butterfly{position:absolute;font-size:70px;color:var(--pink)}
+.about-flower{position:absolute;font-size:70px;color:var(--pink)}
 .about-flower{left:10%;top:12%}
-.about-butterfly{right:8%;bottom:12%}
 .about-copy p{color:var(--muted);margin:15px 0}
 .about-copy .eyebrow{font-size:14.5px;}
 .about-copy .btn{margin-top:10px}
@@ -341,6 +339,7 @@ button{cursor:pointer}
 .item-card.is-offer {border: 2px solid #eab17f;animation: latidoNaranja 2.5s ease-in-out infinite;}  
 .item-card.is-featured.is-offer {border-color: #eab17f;animation: latidoNaranja 2.5s ease-in-out infinite;}  
   
+/* Animación base para móviles */
 @keyframes latidoLila {  
  0% { box-shadow: 0 0 0 0 rgba(197, 169, 223, 0.4); }  
  50% { box-shadow: 0 0 12px 5px rgba(182, 155, 210, 0.7); }  
@@ -352,15 +351,16 @@ button{cursor:pointer}
  100% { box-shadow: 0 0 0 0 rgba(234, 177, 127, 0.4); }  
 }  
   
+/* Latido ultra sutil para PC (para que no llame tanto la atención) */
 @media (min-width: 900px) {  
  @keyframes latidoLila {  
- 0% { box-shadow: 0 0 0 0 rgba(182, 155, 210, 0.4); transform: scale(1); }  
- 50% { box-shadow: 0 0 32px 14px rgba(182, 155, 210, 0.95); transform: scale(1.02); }  
- 100% { box-shadow: 0 0 0 0 rgba(182, 155, 210, 0.4); transform: scale(1); }  
+ 0% { box-shadow: 0 0 0 0 rgba(182, 155, 210, 0); transform: scale(1); }  
+ 50% { box-shadow: 0 0 10px 2px rgba(182, 155, 210, 0.25); transform: scale(1.005); }  
+ 100% { box-shadow: 0 0 0 0 rgba(182, 155, 210, 0); transform: scale(1); }  
  }  
  @keyframes latidoNaranja {  
- 0% { box-shadow: 0 0 0 0 rgba(234, 177, 127, 0.4); transform: scale(1); }  
- 50% { box-shadow: 0 0 32px 14px rgba(234, 177, 127, 0.95); transform: scale(1.02); }  
- 100% { box-shadow: 0 0 0 0 rgba(234, 177, 127, 0.4); transform: scale(1); }  
+ 0% { box-shadow: 0 0 0 0 rgba(234, 177, 127, 0); transform: scale(1); }  
+ 50% { box-shadow: 0 0 10px 2px rgba(234, 177, 127, 0.25); transform: scale(1.005); }  
+ 100% { box-shadow: 0 0 0 0 rgba(234, 177, 127, 0); transform: scale(1); }  
  }  
 }
