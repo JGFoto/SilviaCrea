@@ -54,7 +54,24 @@
  <div id="cart-items" class="cart-items"><p class="empty-cart">Todavía no has añadido productos.</p></div>
  <div class="cart-summary"><div class="summary-line"><span>Unidades</span><strong id="cart-units">0</strong></div><div class="summary-line total-line"><span>Total estimado</span><strong id="cart-total">0,00 €</strong></div><p>Los gastos de envío se concretarán personalmente. El envío de la solicitud no implica ningún pago.</p><button type="button" class="btn btn-primary full-width" id="continue-order">Continuar con la solicitud</button></div>
 </aside>
-<div class="modal-backdrop" id="product-modal" aria-hidden="true"><div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><button type="button" class="icon-button modal-close" data-close-modal aria-label="Cerrar">×</button><img id="modal-image" alt=""><div class="modal-copy"><span class="eyebrow">Silvia Crea</span><h2 id="modal-title"></h2><p id="modal-description"></p><strong id="modal-price"></strong><button type="button" class="btn btn-primary" id="modal-add">Añadir al carrito</button></div></div></div>
+<div class="modal-backdrop" id="product-modal" aria-hidden="true">
+  <div class="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="icon-button modal-close" data-close-modal aria-label="Cerrar">×</button>
+    <div class="modal-image-container">
+      <img id="modal-image" alt="">
+      <div id="modal-placeholder" class="placeholder" aria-hidden="true" style="display:none;">
+        <svg viewBox="0 0 24 24" width="60" height="60" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+      </div>
+    </div>
+    <div class="modal-copy">
+      <span class="eyebrow">Silvia Crea</span>
+      <h2 id="modal-title"></h2>
+      <p id="modal-description"></p>
+      <strong id="modal-price"></strong>
+      <button type="button" class="btn btn-primary" id="modal-add">Añadir al carrito</button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="js/config.js"></script><script src="js/app.js"></script>
 </body></html>

@@ -160,7 +160,7 @@ button{cursor:pointer}
 .cart-drawer.open{transform:translateX(0)}
 .drawer-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:17px}
 .drawer-head h2{font:600 30px var(--serif);color:var(--lilac-dark);margin:0}
-.icon-button{border:0;background:var(--lilac-pale);color:var(--lilac-dark);width:38px;height:38px;border-radius:50%;font-size:25px}
+.icon-button{border:0;background:var(--lilac-pale);color:var(--lilac-dark);width:38px;height:38px;border-radius:50%;font-size:25px;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
 .cart-items{overflow:auto;flex:1;padding:15px 0}
 .empty-cart{color:var(--lilac-dark);text-align:center;padding:35px 10px}
 .cart-row{padding:15px 0;border-bottom:1px solid var(--line)}
@@ -176,14 +176,22 @@ button{cursor:pointer}
 .total-line{font-size:17px;margin:8px 0}
 .cart-summary p{font-size:11px;color:var(--lilac-dark)}
 .full-width{width:100%}
+
+/* Estilos de la superposición (Modal) */
 .modal-backdrop{z-index:120;display:grid;place-items:center;padding:20px}
-.product-modal{position:relative;max-width:780px;width:100%;background:#fff;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--shadow)}
-.product-modal>img{width:100%;height:100%;min-height:320px;object-fit:cover;background:var(--lilac-pale)}
-.modal-copy{padding:38px}
+.product-modal{position:relative;max-width:780px;width:100%;background:#fff;border-radius:24px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;box-shadow:var(--shadow);transition:background-color 0.3s ease}
+.product-modal.theme-pink{background:var(--pink-soft)}
+.product-modal.theme-lilac{background:var(--lilac-card)}
+.modal-image-container{width:100%;height:100%;min-height:320px;background:var(--lilac-pale);display:flex;flex-direction:column}
+.modal-image-container>img{width:100%;height:100%;object-fit:cover}
+.modal-image-container .placeholder{flex:1;display:flex;align-items:center;justify-content:center}
+.icon-button.modal-close{background:var(--blue-pastel-soft);position:absolute;right:12px;top:12px;z-index:2;line-height:1;padding:0 0 3px 0}
+.modal-copy{padding:38px;position:relative;z-index:1}
+.modal-copy::before{content:"";position:absolute;inset:0;background-image:url('https://i.imgur.com/F84jcJa.png');background-repeat:no-repeat;background-position:center;background-size:65%;opacity:0.04;pointer-events:none;z-index:-1}
 .modal-copy h2{font:600 30px var(--serif);color:var(--lilac-dark)}
 .modal-copy p{color:var(--muted);white-space:pre-line}
 .modal-copy strong{display:block;color:var(--pink-dark);font-size:20px;margin:20px 0}
-.modal-close{position:absolute;right:12px;top:12px;z-index:2}
+.modal-copy .eyebrow{font-size:13.5px}
 .toast{position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--lilac-dark);color:#fff;padding:11px 20px;border-radius:30px;z-index:150;transition:.25s;font-size:13px}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .loading-note{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px}   
@@ -221,7 +229,7 @@ button{cursor:pointer}
  .page-hero{padding:58px 20px 30px}
  .contact-card,.form-card{padding:25px}
  .product-modal{grid-template-columns:1fr;max-height:90dvh;overflow:auto}
- .product-modal>img{height:220px;min-height:0}
+ .modal-image-container{height:220px;min-height:0}
  .modal-copy{padding:25px}
  .modal-copy h2{font-size:25px}
  .butterfly{display:none}  
