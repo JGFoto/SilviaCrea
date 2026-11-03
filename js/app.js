@@ -35,7 +35,10 @@
  else items.innerHTML=cart.map((x,i)=>`<div class="cart-row"><div class="cart-row-top"><div><strong>${esc(x.name)}</strong><br><small>${euro(x.price)} / unidad</small></div><b>${euro(x.price*x.qty)}</b></div><div class="cart-row-controls"><button data-qty="-1" data-index="${i}" aria-label="Restar">−</button><span>${x.qty}</span><button data-qty="1" data-index="${i}" aria-label="Sumar">+</button><button data-remove="${i}">Eliminar</button></div><textarea data-comment="${i}" rows="2" placeholder="Personalización o comentario…">${esc(x.comment||"")}</textarea></div>`).join("");  
  const units=cart.reduce((n,x)=>n+x.qty,0), total=cart.reduce((n,x)=>n+x.qty*x.price,0);  
  $("#cart-units").textContent=units; $("#cart-total").textContent=euro(total);  
- saveCart();  
+ saveCart();
+ // Mostrar u ocultar el botón de vaciar carrito
+ const emptyBtn = $("#empty-cart-btn");
+ if(emptyBtn) emptyBtn.style.display = cart.length ? "block" : "none";
  }  
  function openCart(){ $(".cart-drawer")?.classList.add("open");$(".drawer-backdrop")?.classList.add("open");$(".cart-drawer")?.setAttribute("aria-hidden","false");document.body.style.overflow="hidden";}  
  function closeCart(){ $(".cart-drawer")?.classList.remove("open");$(".drawer-backdrop")?.classList.remove("open");$(".cart-drawer")?.setAttribute("aria-hidden","true");document.body.style.overflow="";}  
@@ -103,7 +106,7 @@
    
    return `<article class="${classes}" data-card-kind="${kind}" data-index="${index}" tabindex="0" role="group" aria-label="${esc(p.name||p.title)}. Pulsa para ver el detalle">  
    ${featured}${offer}  
-   ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>`}  
+   ${image?`<div class="image-wrapper"><img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false"></div>`:`<div class="image-wrapper"><div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div></div>`}  
    <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>  
    ${isProduct?`<div class="item-meta">${price}</div><div class="stock-notice">${p.stock>0&&p.stock<=5?'<small class="low-stock">Pocas unidades</small>':''}</div>`:''}  
    <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>  
@@ -127,7 +130,28 @@
  const grid=$("#gallery-grid");if(grid){grid.innerHTML=gallery.length?gallery.map((p,i)=>card(p,"gallery",i)).join(""):'<p class="loading-note">Todavía no hay trabajos publicados.</p>';prepareSlider(grid,gallery.length);}  
  }  
  function showLoadError(id){const el=$(id);if(el)el.innerHTML='<p class="loading-note">No se ha podido cargar el contenido. Inténtalo de nuevo más tarde.</p>';}  
- function initMenu(){const btn=$(".menu-toggle"),nav=$(".main-nav");btn?.addEventListener("click",()=>{const open=nav.classList.toggle("open");btn.setAttribute("aria-expanded",String(open));});}  
+ function initMenu(){
+   const btn=$(".menu-toggle"),nav=$(".main-nav");
+   btn?.addEventListener("click",()=>{const open=nav.classList.toggle("open");btn.setAttribute("aria-expanded",String(open));});
+   
+   // Creación del botón Vaciar Carrito dinámico
+   const drawerHead = $(".drawer-head");
+   if(drawerHead && !$("#empty-cart-btn")) {
+     const emptyBtn = document.createElement("button");
+     emptyBtn.id = "empty-cart-btn";
+     emptyBtn.className = "text-button empty-btn-style";
+     emptyBtn.innerHTML = "Vaciar";
+     emptyBtn.type = "button";
+     drawerHead.insertBefore(emptyBtn, drawerHead.querySelector(".icon-button"));
+     
+     emptyBtn.addEventListener("click", () => {
+       if(cart.length > 0 && confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
+         cart = [];
+         updateCart();
+       }
+     });
+   }
+ }  
  async function sendContact(e){  
  e.preventDefault();const form=e.currentTarget,status=$("#contact-status"),button=form.querySelector("button[type=submit]");  
  const data=new FormData(form),name=String(data.get("name")||"").trim(),email=String(data.get("email")||"").trim(),message=String(data.get("message")||"").trim();  
