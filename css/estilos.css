@@ -1,10 +1,17 @@
-:root{--lilac:#b99acb;--lilac-dark:#765b89;--lilac-pale:#f0e7f4;--pink:#e6a9bf;--pink-dark:#bf7895;--pink-soft:#fbecf3;--blue-pastel:#e2edf8;--blue-pastel-soft:#f1f6fc;--lilac-card:#e9ddf3;--white-lilac:#f7f0fb;--cream:#fffaf5;--ink:#514957;--muted:#817887;--line:#eadfea;--white:#fff;--shadow:0 18px 50px rgba(107,78,117,.10);--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",Arial,sans-serif;--script:"Caveat",cursive}   
+:root{--lilac:#b99acb;--lilac-dark:#765b89;--lilac-pale:#f0e7f4;--pink:#e6a9bf;--pink-dark:#bf7895;--pink-soft:#fbecf3;--blue-pastel:#e2edf8;--blue-pastel-soft:#f1f6fc;--lilac-card:#e9ddf3;--white-lilac:#f7f0fb;--cream:#fffaf5;--ink:#514957;--muted:#817887;--line:#eadfea;--white:#fff;--shadow:0 18px 50px rgba(107,78,117,.10);--serif:"Playfair Display",Georgia,serif;--sans:"DM Sans",Arial,sans-serif;--script:"Caveat",cursive;
+--svg-emojis: url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cg font-size='20' opacity='0.16'%3E%3Ctext x='40' y='50' transform='rotate(-12 40 50)'%3E🧶%3C/text%3E%3Ctext x='200' y='70' transform='rotate(15 200 70)'%3E🦋%3C/text%3E%3Ctext x='350' y='40' transform='rotate(-5 350 40)'%3E✏️%3C/text%3E%3Ctext x='100' y='160' transform='rotate(22 100 160)'%3E🎨%3C/text%3E%3Ctext x='280' y='190' transform='rotate(-18 280 190)'%3E🧵%3C/text%3E%3Ctext x='50' y='290' transform='rotate(10 50 290)'%3E🖌️%3C/text%3E%3Ctext x='220' y='320' transform='rotate(-20 220 320)'%3E🧶%3C/text%3E%3Ctext x='360' y='260' transform='rotate(8 360 260)'%3E🦋%3C/text%3E%3Ctext x='140' y='370' transform='rotate(-10 140 370)'%3E🧵%3C/text%3E%3C/g%3E%3C/svg%3E");
+}   
 *{box-sizing:border-box}html{scroll-behavior:smooth}  
 
 body{  
  margin:0;  
- background-color: #f7effa;  
- background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E"), radial-gradient(circle at 15% 15%, rgba(220,185,235,0.4), transparent 50%), radial-gradient(circle at 85% 85%, rgba(240,195,215,0.4), transparent 50%);  
+ background-color: #e8d9eb; /* Fondo intermedio para que resalten los detalles */
+ background-image: 
+   var(--svg-emojis),
+   url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='paper'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='3' result='noise'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23paper)'/%3E%3C/svg%3E"),
+   radial-gradient(circle at 10% 20%, rgba(118,91,137, 0.22), transparent 60%),
+   radial-gradient(circle at 85% 85%, rgba(191,120,149, 0.20), transparent 60%),
+   radial-gradient(circle at 50% 50%, rgba(200,175,225, 0.30), transparent 60%);
  background-attachment: fixed;  
  color:var(--ink);  
  font-family:var(--sans);  
@@ -122,6 +129,7 @@ button{cursor:pointer}
 .about-flower{left:10%;top:12%}
 .about-butterfly{right:8%;bottom:12%}
 .about-copy p{color:var(--muted);margin:15px 0}
+.about-copy .eyebrow{font-size:14.5px;}
 .about-copy .btn{margin-top:10px}
 .order-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .order-steps .step-card{border:1px solid var(--line);border-radius:22px;padding:30px;text-align:center;box-shadow:0 8px 25px rgba(107,78,117,.04)}
@@ -154,16 +162,16 @@ button{cursor:pointer}
 .site-footer small{font-size:11px}
 
 /* Destellos / Estrellitas (Background Sparkles) */
-.sparkles {position: fixed;inset: 0;pointer-events: none;z-index: -2;background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.9' transform='scale(0.1) translate(400, 400)'/%3E%3Cpath d='M200,50 L202,98 L250,100 L202,102 L200,150 L198,102 L150,100 L198,98 Z' fill='%23ffffff' opacity='0.7' transform='scale(0.12) translate(1800, 1500)'/%3E%3Cpath d='M200,50 L204,96 L250,100 L204,104 L200,150 L196,104 L150,100 L196,96 Z' fill='%23ffffff' opacity='0.6' transform='scale(0.08) translate(3500, 600)'/%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.8' transform='scale(0.11) translate(700, 2600)'/%3E%3C/svg%3E");background-size: 320px 320px;animation: twinkle 6s ease-in-out infinite alternate;}
-@keyframes twinkle {0% { opacity: 0.15; } 100% { opacity: 0.75; transform: scale(1.05); }}
+.sparkles {position: fixed;inset: 0;pointer-events: none;z-index: -2;background-image: url("data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='1' transform='scale(0.18) translate(100, 200)'/%3E%3Cpath d='M200,50 L202,98 L250,100 L202,102 L200,150 L198,102 L150,100 L198,98 Z' fill='%23ffffff' opacity='0.85' transform='scale(0.2) translate(1500, 1200)'/%3E%3Cpath d='M200,50 L204,96 L250,100 L204,104 L200,150 L196,104 L150,100 L196,96 Z' fill='%23ffffff' opacity='0.9' transform='scale(0.12) translate(2800, 500)'/%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.75' transform='scale(0.16) translate(600, 2200)'/%3E%3Cpath d='M200,50 L203,97 L250,100 L203,103 L200,150 L197,103 L150,100 L197,97 Z' fill='%23ffffff' opacity='0.9' transform='scale(0.14) translate(2200, 1800)'/%3E%3C/svg%3E");background-size: 320px 320px;animation: twinkle 4s ease-in-out infinite alternate;}
+@keyframes twinkle {0% { opacity: 0.2; transform:scale(0.95); } 100% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 6px rgba(255,255,255,0.8)); }}
 
-/* Mariposas animadas (Aleteo lento) */
-.butterfly{position:fixed;z-index:-1;pointer-events:none;opacity:0.35;}
-.butterfly-inner{display:inline-block;font-size:24px;filter:drop-shadow(0 4px 6px rgba(107,78,117,0.15));transform-origin:center;animation:flap 1s ease-in-out infinite alternate;}
+/* Mariposas animadas */
+.butterfly{position:fixed;z-index:-1;pointer-events:none;opacity:0.65;}
+.butterfly-inner{display:inline-block;font-size:24px;filter:drop-shadow(0 4px 6px rgba(107,78,117,0.25));transform-origin:center;animation:flap 0.8s ease-in-out infinite alternate;}
 @keyframes flap {0% { transform: scaleX(1) translateY(0px) rotate(-8deg); } 100% { transform: scaleX(0.15) translateY(-5px) rotate(8deg); }}
-.butterfly-1{animation:flyX1 50s linear infinite, flyY1 18s ease-in-out infinite alternate;}
-.butterfly-2{animation:flyX2 60s linear infinite, flyY2 24s ease-in-out infinite alternate; animation-delay:-12s;}
-.butterfly-3{animation:flyX3 75s linear infinite, flyY3 30s ease-in-out infinite alternate; animation-delay:-30s;}
+.butterfly-one{animation:flyX1 45s linear infinite, flyY1 14s ease-in-out infinite alternate;}
+.butterfly-two{animation:flyX2 55s linear infinite, flyY2 18s ease-in-out infinite alternate; animation-delay:-15s;}
+.butterfly-three{animation:flyX3 65s linear infinite, flyY3 22s ease-in-out infinite alternate; animation-delay:-35s;}
 @keyframes flyX1 {0% { left: -10%; } 100% { left: 110%; }}
 @keyframes flyY1 {0% { top: 20%; } 100% { top: 40%; }}
 @keyframes flyX2 {0% { right: -10%; } 100% { right: 110%; }}
@@ -302,7 +310,6 @@ button{cursor:pointer}
 @media(prefers-reduced-motion:reduce){.item-card.is-featured{animation:none;}}   
   
 .main-nav a{color:#665675;}   
-body:after{content:"🦋 🧶 ✏️\A\A 🖌️ 🧵 🦋\A\A 🧶 🎨 🖌️";white-space:pre;position:fixed;inset:8vh 1.5vw auto;z-index:0;pointer-events:none;color:#a68dbd;font-size:clamp(17px,2vw,27px);line-height:8.5rem;opacity:.12;letter-spacing:1.2rem;transform:rotate(-3deg);}   
 .site-header,.site-footer,.hero,.section,.page-hero,.cta-band{position:relative;z-index:1;}   
 .item-content p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;min-height:calc(1.65em * 3);max-height:calc(1.65em * 3);margin-bottom:15px;}   
 .item-meta{width:100%;justify-content:center;}   
@@ -313,7 +320,6 @@ body:after{content:"🦋 🧶 ✏️\A\A 🖌️ 🧵 🦋\A\A 🧶 🎨 🖌️
 .item-meta .low-stock{order:-1;margin-right:2px;color:#a77d58;background:#fff0e2;padding:4px 8px;font-size:10px;}   
   
 @media(max-width:700px){   
- body:after{font-size:17px;line-height:7rem;letter-spacing:.5rem;opacity:.09;}   
  .item-meta .price{gap:6px;font-size:17px;}   
  .item-meta .low-stock{font-size:9px;padding:4px 6px;}   
 }   
@@ -342,6 +348,14 @@ body:after{content:"🦋 🧶 ✏️\A\A 🖌️ 🧵 🦋\A\A 🧶 🎨 🖌️
 .slider-btn:hover {background: var(--lilac-pale);transform: translateY(-50%) scale(1.05);}  
 .slider-btn-left {left: -22px;}  
 .slider-btn-right {right: -22px;}  
+  
+.empty-btn-style{font-size: 13px;font-weight: 700;color: var(--pink-dark);margin-left: auto;margin-right: 12px;padding: 6px 12px;border-radius: 20px;border: 1px solid var(--pink);background: #fff;transition: background 0.2s, transform 0.2s;}  
+.empty-btn-style:hover{background: var(--lilac-pale);transform: translateY(-1px);}  
+  
+.confirm-modal {position: relative;max-width: 380px;width: 90%;background: var(--blue-pastel-soft);border-radius: 24px;padding: 35px 25px;text-align: center;box-shadow: var(--shadow);border: 1px solid #c3d7f0;}  
+.confirm-modal h3 {font: 600 24px var(--serif);color: var(--lilac-dark);margin: 0 0 10px;}  
+.confirm-modal p {color: var(--muted);font-size: 14px;margin-bottom: 25px;}  
+.confirm-btns {display: flex;justify-content: center;gap: 15px;}  
   
 @media (max-width: 900px) {  
  .slider-btn-left { left: -10px; }  
