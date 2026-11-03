@@ -22,7 +22,6 @@
  const rows=parseCSV(await res.text()); return rows.slice(1);  
  }  
  const val=(r,i)=>String(r[i]??"").trim();  
- // Añadido "verdadero", "x" y "destacado" para atrapar cualquier formato de Sheets en español
  const yes=v=>["si","sí","true","1","yes","verdadero","x","destacado"].includes(String(v).trim().toLowerCase());  
  const money=v=>Number(String(v??"0").replace(/[€\s]/g,"").replace(/\./g,"").replace(",", "."))||0;  
  const euro=v=>Number(v).toLocaleString("es-ES",{style:"currency",currency:"EUR"});  
@@ -104,7 +103,7 @@
    
    return `<article class="${classes}" data-card-kind="${kind}" data-index="${index}" tabindex="0" role="group" aria-label="${esc(p.name||p.title)}. Pulsa para ver el detalle">  
    ${featured}${offer}  
-   ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true">📷</div>`}  
+   ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>`}  
    <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>  
    ${isProduct?`<div class="item-meta">${price}</div><div class="stock-notice">${p.stock>0&&p.stock<=5?'<small class="low-stock">Pocas unidades</small>':''}</div>`:''}  
    <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>  
@@ -113,13 +112,13 @@
  async function loadProducts(){  
  const rows=await getSheet("CATALOGO");  
  products=rows.filter(r=>val(r,0)).map(r=>({name:val(r,0),description:val(r,1),price:money(val(r,2)),image:val(r,3),stock:val(r,4)===""?99:Math.max(0,parseInt(val(r,4),10)||0),detail:val(r,5),largeImage:val(r,6),featured:yes(val(r,7)),offer:yes(val(r,8)),offerPrice:val(r,9)===""?undefined:money(val(r,9))}));  
- // Ordenación reforzada para destacados
  products.sort((a,b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1));
  const grid=$("#products-grid");if(grid){grid.innerHTML=products.length?products.map((p,i)=>card(p,"product",i)).join(""):'<p class="loading-note">Todavía no hay productos disponibles.</p>';prepareSlider(grid,products.length);}  
  }  
  async function loadSpecialties(){  
  const rows=await getSheet("ESPECIALIDADES");  
  specialties=rows.filter(r=>val(r,0)).map(r=>({name:val(r,0),description:val(r,1),image:val(r,2),detail:val(r,3),largeImage:val(r,4),featured:yes(val(r,5))}));  
+ specialties.sort((a,b) => (a.featured === b.featured ? 0 : a.featured ? -1 : 1));
  const grid=$("#specialties-grid");if(grid){grid.innerHTML=specialties.length?specialties.map((p,i)=>card(p,"specialty",i)).join(""):'<p class="loading-note">Próximamente descubrirás aquí mis especialidades.</p>';prepareSlider(grid,specialties.length);}  
  }  
  async function loadGallery(){  
