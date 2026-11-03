@@ -1,4 +1,27 @@
-(() => {   
+(() => {
+// --- SISTEMA DE MEMORIA PARA RECARGAS (Soluciona el reseteo de Google Sites) ---
+const pageMap = {'home': 'index.html', 'shop': 'tienda.html', 'gallery': 'galeria.html', 'about': 'sobre-mi.html', 'orders': 'encargos.html', 'contact': 'contacto.html'};
+const currentFile = pageMap[document.body.dataset.page] || 'index.html';
+const savedPage = sessionStorage.getItem('silviacrea_last_page');
+
+let navType = "";
+if (window.performance && performance.getEntriesByType) {
+    const navEntries = performance.getEntriesByType("navigation");
+    if (navEntries.length > 0) navType = navEntries[0].type;
+    else if (performance.navigation && performance.navigation.type === 2) navType = "back_forward";
+}
+
+// Si es una recarga (no se ha usado el botón de ir atrás), comprobamos la memoria
+if (navType !== "back_forward") {
+    if (savedPage && savedPage !== currentFile) {
+        window.location.replace(savedPage);
+        return; // Detenemos la ejecución para redirigir al instante
+    }
+}
+// Guardamos la página actual para futuras recargas
+sessionStorage.setItem('silviacrea_last_page', currentFile);
+// --------------------------------------------------------------------------------
+
 const cfg = window.SILVIA_CONFIG || {};   
 const $ = (s, root=document) => root.querySelector(s); const $$ = (s, root=document) => [...root.querySelectorAll(s)];   
 const CART_KEY = "silviacrea_cart_v2";   
@@ -243,6 +266,15 @@ showCustomAlert("Hubo un problema", "No hemos podido verificar el registro de tu
 }   
   
 document.addEventListener("click",e=>{   
+// Guardar página para el sistema de memoria
+const link = e.target.closest("a");
+if (link) {
+    const href = link.getAttribute("href");
+    if (href && href.includes(".html") && !href.startsWith("http")) {
+        sessionStorage.setItem("silviacrea_last_page", href);
+    }
+}
+
 if(e.target.closest("[data-open-cart]"))openCart();   
 if(e.target.closest("[data-close-cart]"))closeCart();   
 const add=e.target.closest("[data-add]");if(add){e.stopPropagation();addProduct(products[Number(add.dataset.add)]);return;}   
@@ -264,7 +296,7 @@ if(e.target.closest("#modal-img-wrapper")) {
        const fsModal = $("#fs-modal");
        const pModal = $(".product-modal");
        const fsContent = $(".fs-modal-content");
-       fsContent.className = "fs-modal-content"; // Reset
+       fsContent.className = "fs-modal-content"; 
        if(pModal.classList.contains("theme-pink")) fsContent.classList.add("theme-pink");
        if(pModal.classList.contains("theme-lilac")) fsContent.classList.add("theme-lilac");
        fsModal.classList.add("open");
