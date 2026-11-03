@@ -1,7 +1,6 @@
 (() => {  
  const cfg = window.SILVIA_CONFIG || {};  
- const $ = (s, root=document) => root.querySelector(s);  
- const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
+ const $ = (s, root=document) => root.querySelector(s); const $$ = (s, root=document) => [...root.querySelectorAll(s)];  
  const CART_KEY = "silviacrea_cart_v2";  
  let products = [], specialties = [], gallery = [], cart = loadCart(), modalProduct = null, toastTimer;  
   
@@ -30,9 +29,7 @@
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));  
  function loadCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||"[]").filter(x=>x&&x.name&&Number(x.price)>=0&&Number(x.qty)>0);}catch{return[];}}  
  function saveCart(){try{localStorage.setItem(CART_KEY,JSON.stringify(cart));}catch{}}  
- function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);}  
- function updateCart(){  
- $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
+ function showToast(msg){const el=$("#toast");if(!el)return;el.textContent=msg;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2400);} function updateCart(){ $$(".cart-count").forEach(el=>el.textContent=cart.reduce((n,x)=>n+x.qty,0));  
  const items=$("#cart-items"); if(!items)return;  
  if(!cart.length){items.innerHTML='<p class="empty-cart">Todavía no has añadido productos.</p>';}  
  else items.innerHTML=cart.map((x,i)=>`<div class="cart-row"><div class="cart-row-top"><div><strong>${esc(x.name)}</strong><br><small>${euro(x.price)} / unidad</small></div><b>${euro(x.price*x.qty)}</b></div><div class="cart-row-controls"><button data-qty="-1" data-index="${i}" aria-label="Restar">−</button><span>${x.qty}</span><button data-qty="1" data-index="${i}" aria-label="Sumar">+</button><button data-remove="${i}">Eliminar</button></div><textarea data-comment="${i}" rows="2" placeholder="Personalización o comentario…">${esc(x.comment||"")}</textarea></div>`).join("");  
@@ -111,7 +108,7 @@
    ${image?`<div class="image-wrapper"><img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false"></div>`:`<div class="image-wrapper"><div class="item-image placeholder" aria-hidden="true"><svg viewBox="0 0 24 24" width="42" height="42" stroke="#b69bd2" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div></div>`}  
    <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>  
    ${isProduct?`<div class="item-meta">${price}</div><div class="stock-notice">${p.stock>0&&p.stock<=5?'<small class="low-stock">Pocas unidades</small>':''}</div>`:''}  
-   <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>  
+   <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir carrito</button>`:''}</div>  
    </div></article>`;  
  } 
  async function loadProducts(){  
@@ -135,6 +132,12 @@
  function initMenu(){
    const btn=$(".menu-toggle"),nav=$(".main-nav");
    btn?.addEventListener("click",()=>{const open=nav.classList.toggle("open");btn.setAttribute("aria-expanded",String(open));});
+   
+   // Cambiar corazón por flor en el carrito
+   const cartTrigger = $(".cart-trigger");
+   if(cartTrigger && cartTrigger.innerHTML.includes("♡")) {
+     cartTrigger.innerHTML = cartTrigger.innerHTML.replace("♡", "✿");
+   }
    
    // Creación del botón Vaciar Carrito dinámico
    const drawerHead = $(".drawer-head");
@@ -208,7 +211,6 @@
  }finally{btn.disabled=false;btn.textContent="Enviar solicitud de pedido";}  
  }  
  
- // Lógica de clics universal en la web (sin secuestro de clics por el arrastre antiguo)
  document.addEventListener("click",e=>{  
  if(e.target.closest("[data-open-cart]"))openCart();  
  if(e.target.closest("[data-close-cart]"))closeCart();  
@@ -216,7 +218,6 @@
  const detail=e.target.closest("[data-detail-card]");  
  if(detail){const i=Number(detail.dataset.index),kind=detail.dataset.detailCard;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");return;}  
  
- // Al hacer clic en cualquier lugar de la tarjeta que no sea un botón, abrimos el modal
  const cardEl=e.target.closest("[data-card-kind]");  
  if(cardEl&&!e.target.closest("button")){
    const i=Number(cardEl.dataset.index),kind=cardEl.dataset.cardKind;
