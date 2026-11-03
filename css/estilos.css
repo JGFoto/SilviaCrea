@@ -111,7 +111,7 @@ body:after{
   color:#a68dbd;font-size:clamp(17px,2vw,27px);line-height:8.5rem;
   opacity:.12;letter-spacing:1.2rem;transform:rotate(-3deg);
 }
-.site-header,.site-footer,.hero,.section,.page-hero,.cta-band,.cart-drawer,.modal-backdrop,.drawer-backdrop,.toast{position:relative;z-index:1;}
+.site-header,.site-footer,.hero,.section,.page-hero,.cta-band{position:relative;z-index:1;}
 .butterfly{z-index:2;opacity:.34;color:#a78ac0;}
 /* Tres líneas reservadas para la descripción: alturas consistentes entre tarjetas. */
 .item-content p{
@@ -161,3 +161,19 @@ body:after{
 .item-meta .low-stock{grid-column:1;justify-self:end;margin:0;}
 .item-meta .current-price{grid-column:2;justify-self:center;}
 .item-meta .old-price{grid-column:3;justify-self:start;}
+
+/* Ajustes de tienda y panel lateral del carrito. */
+.item-meta{display:flex;width:100%;justify-content:center;align-items:center;min-height:34px;margin:7px 0 8px;}
+.item-meta .price{display:flex;width:100%;justify-content:center;align-items:center;gap:10px;flex-wrap:nowrap;text-align:center;color:var(--price-lilac);font-size:18px;font-weight:800;}
+.item-meta .current-price{color:var(--price-lilac);font-weight:800;white-space:nowrap;}
+.item-meta .current-price.offer-price{color:var(--offer-orange);}
+.item-meta .old-price{color:var(--price-lilac);font-size:13px;font-weight:500;white-space:nowrap;}
+.stock-notice{display:flex;justify-content:center;align-items:center;min-height:29px;margin:0 0 9px;}
+.stock-notice .low-stock{color:#a77d58;background:#fff0e2;padding:5px 11px;font-size:10px;}
+.item-actions{margin-top:0;}
+/* El carrito solo aparece como panel lateral al pulsar el botón del menú superior. */
+.cart-drawer{position:fixed;right:0;top:0;bottom:0;height:100dvh;width:min(460px,100%);z-index:100;transform:translateX(105%);visibility:hidden;pointer-events:none;transition:transform .3s ease,visibility .3s ease;}
+.cart-drawer.open{transform:translateX(0);visibility:visible;pointer-events:auto;}
+.drawer-backdrop{position:fixed;inset:0;z-index:90;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s ease;}
+.drawer-backdrop.open{opacity:1;visibility:visible;pointer-events:auto;}
+@media(max-width:700px){.item-meta .price{font-size:17px;gap:8px;}.item-meta .old-price{font-size:12px;}}

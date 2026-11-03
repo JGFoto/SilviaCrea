@@ -69,7 +69,7 @@
     let price="";
     if(isProduct){
       if(p.stock<=0) price='<span class="stock-out">Agotado</span>';
-      else price=`<span class="price">${p.stock<=5?'<small class="low-stock">Pocas unidades</small>':""}<strong class="current-price ${p.offer&&p.offerPrice!==undefined?'offer-price':''}">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong>${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}</span>`;
+      else price=`<span class="price"><strong class="current-price ${p.offer&&p.offerPrice!==undefined?'offer-price':''}">${euro(p.offer&&p.offerPrice!==undefined?p.offerPrice:p.price)}</strong>${p.offer&&p.offerPrice!==undefined?`<del class="old-price">${euro(p.price)}</del>`:""}</span>`;
     }
     const featured=p.featured?'<span class="featured-label">Destacado</span>':'';
     const offer=isProduct&&p.offer?'<span class="offer-label">Oferta</span>':'';
@@ -78,7 +78,7 @@
       ${featured}${offer}
       ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true">✿</div>`}
       <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>
-        ${isProduct?`<div class="item-meta">${price}</div>`:''}
+        ${isProduct?`<div class="item-meta">${price}</div>${p.stock>0&&p.stock<=5?'<div class="stock-notice"><small class="low-stock">Pocas unidades</small></div>':''}`:''}
         <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>
       </div></article>`;
   }
