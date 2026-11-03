@@ -209,8 +209,11 @@
  alert("No hemos podido verificar el registro de tu solicitud. No se ha vaciado tu carrito. Puedes intentarlo de nuevo más tarde o escribir a "+cfg.email+". Detalle: "+err.message);  
  }finally{btn.disabled=false;btn.textContent="Enviar solicitud de pedido";}  
  }  
+ 
+ // Lógica de Arrastre Corregida (Ignora pantallas táctiles para no bloquear el deslizamiento nativo del móvil)
  let activeDrag=null, suppressSliderClickUntil=0;  
  document.addEventListener("pointerdown",e=>{  
+ if(e.pointerType !== "mouse") return; // CRÍTICO: Permite que el móvil deslice de forma nativa y perfecta
  const grid=e.target.closest(".has-slider");  
  if(!grid||e.button!==0||e.target.closest("button,a,input,textarea,select"))return;  
  const cardEl=e.target.closest("[data-card-kind]");  
@@ -219,7 +222,7 @@
  try{grid.setPointerCapture(e.pointerId);}catch{}  
  },{passive:true});  
  document.addEventListener("pointermove",e=>{  
- if(!activeDrag)return;  
+ if(e.pointerType !== "mouse" || !activeDrag) return;  
  const dx=e.clientX-activeDrag.startX,dy=e.clientY-activeDrag.startY;  
  if(!activeDrag.dragging&&Math.abs(dx)>6&&Math.abs(dx)>Math.abs(dy)*1.15)activeDrag.dragging=true;  
  if(activeDrag.dragging){activeDrag.grid.scrollLeft-=e.clientX-activeDrag.lastX;e.preventDefault();}  
