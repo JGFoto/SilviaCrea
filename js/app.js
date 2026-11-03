@@ -145,9 +145,26 @@
      drawerHead.insertBefore(emptyBtn, drawerHead.querySelector(".icon-button"));
      
      emptyBtn.addEventListener("click", () => {
-       if(cart.length > 0 && confirm("¿Estás seguro de que quieres vaciar todo el carrito?")) {
-         cart = [];
-         updateCart();
+       if(cart.length > 0) {
+         const backdrop = document.createElement("div");
+         backdrop.className = "modal-backdrop open";
+         backdrop.style.zIndex = "200"; // Aseguramos que sale por encima del carrito
+         backdrop.innerHTML = `<div class="confirm-modal" role="dialog" aria-modal="true">
+           <h3>¿Vaciar carrito?</h3>
+           <p>Se eliminarán todos los productos que has añadido.</p>
+           <div class="confirm-btns">
+             <button class="btn btn-soft" id="btn-cancel-empty">Cancelar</button>
+             <button class="btn btn-primary" id="btn-confirm-empty">Sí, vaciar</button>
+           </div>
+         </div>`;
+         document.body.appendChild(backdrop);
+         
+         document.getElementById("btn-cancel-empty").onclick = () => backdrop.remove();
+         document.getElementById("btn-confirm-empty").onclick = () => {
+           cart = [];
+           updateCart();
+           backdrop.remove();
+         };
        }
      });
    }
@@ -166,6 +183,13 @@
  if(!cart.length){showToast("Tu carrito está vacío.");return;}  
  const name=$("#customer-name")?.value.trim(),email=$("#customer-email")?.value.trim(),phone=$("#customer-phone")?.value.trim(),address=$("#customer-address")?.value.trim(),comment=$("#customer-comment")?.value.trim();  
  if(!name||!email||!phone||!address){showToast("Completa los datos obligatorios.");return;}  
+ 
+ // Validación de Correo y Teléfono en JS por si el navegador omite el HTML5
+ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+ if(!emailRegex.test(email)){showToast("Por favor, introduce un correo electrónico válido.");return;}
+ const cleanPhone = phone.replace(/\D/g,"");
+ if(cleanPhone.length !== 9){showToast("El número de teléfono debe tener exactamente 9 dígitos.");return;}
+ 
  const total=cart.reduce((n,x)=>n+x.price*x.qty,0);  
  const productsText=cart.map(x=>`- ${x.qty}x ${x.name} | Personalización: ${x.comment||"Sin detalles"}`).join("\n");  
  const payload={Cliente:name,Email:email,Telefono:phone.replace(/\D/g,""),Direccion:address,Productos:productsText,Total:`${total.toFixed(2).replace(".",",")} €`,Comentario:comment};  
@@ -222,7 +246,7 @@
  $("#continue-order")?.addEventListener("click",()=>{  
  if(!cart.length){showToast("Añade algún producto primero.");return;}  
  const drawer=$(".cart-drawer");drawer.innerHTML=`<div class="drawer-head"><div><span class="eyebrow">Un último paso</span><h2>Datos de tu solicitud</h2></div><button type="button" class="icon-button" data-close-cart aria-label="Cerrar">×</button></div>  
- <form id="order-form" class="form-card" style="overflow:auto;margin-top:15px;padding:20px"><label>Nombre *<input id="customer-name" required autocomplete="name"></label><label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email"></label><label>Teléfono *<input id="customer-phone" required inputmode="tel" autocomplete="tel"></label><label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address"></textarea></label><label>Comentario general<textarea id="customer-comment" rows="3"></textarea></label><p class="small-note">El importe es estimado y no incluye gastos de envío. No se realizará ningún pago ahora; Silvia confirmará los detalles y el importe final.</p><button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button></form>`;  
+ <form id="order-form" class="form-card" style="overflow:auto;margin-top:15px;padding:20px"><label>Nombre *<input id="customer-name" required autocomplete="name"></label><label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email" placeholder="ejemplo@correo.com"></label><label>Teléfono (9 dígitos) *<input id="customer-phone" required inputmode="numeric" pattern="[0-9]{9}" title="El teléfono debe tener exactamente 9 dígitos" autocomplete="tel"></label><label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address"></textarea></label><label>Comentario general<textarea id="customer-comment" rows="3"></textarea></label><p class="small-note">El importe mostrado es estimado y no incluye los gastos de envío. En esta etapa no se realizará ningún cargo; Silvia contactará contigo para confirmar los detalles y el importe definitivo.<br><br><strong style="color:var(--pink-dark)">Nota importante:</strong> Actualmente solo realizamos envíos dentro de la Península.</p><button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button></form>`;  
  $("#order-form").addEventListener("submit",e=>{e.preventDefault();sendOrder();});  
  });  
  $("#contact-form")?.addEventListener("submit",sendContact);  
