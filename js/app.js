@@ -161,12 +161,12 @@ emptyBtn.addEventListener("click", () => {
  const backdrop = document.createElement("div");  
  backdrop.className = "modal-backdrop open";  
  backdrop.style.zIndex = "200";  
- backdrop.innerHTML = `<div class="confirm-modal" role="dialog" aria-modal="true">  
+ backdrop.innerHTML = `<div class="confirm-modal" role="dialog" aria-modal="true" style="background:var(--blue-pastel-soft); border-color:#c3d7f0;">  
  <h3>¿Vaciar carrito?</h3>  
  <p>Se eliminarán todos los productos que has añadido.</p>  
  <div class="confirm-btns">  
- <button class="btn btn-soft" id="btn-cancel-empty">Cancelar</button>  
- <button class="btn btn-primary" id="btn-confirm-empty">Sí, vaciar</button>  
+ <button class="btn" id="btn-cancel-empty" style="background:var(--pink-soft); color:var(--lilac-dark); border:1px solid #f0d5e1;">Cancelar</button>  
+ <button class="btn" id="btn-confirm-empty" style="background:var(--lilac-card); color:var(--pink-dark); border:1px solid #dfceeb;">Sí, vaciar</button>  
  </div>  
  </div>`;  
  document.body.appendChild(backdrop);  
@@ -190,7 +190,22 @@ const body=encodeURIComponent(`Nombre: ${name}\nCorreo: ${email}\n\n${message}`)
 window.location.href=`mailto:${cfg.email}?subject=${subject}&body=${body}`;   
 status.textContent="Se ha abierto tu aplicación de correo para que puedas enviar el mensaje.";   
 button.disabled=false;button.textContent="Enviar consulta";   
-}   
+}
+
+function showCustomAlert(title, message) {
+    const backdrop = document.createElement("div");
+    backdrop.className = "modal-backdrop open";
+    backdrop.style.zIndex = "200";
+    backdrop.innerHTML = `<div class="confirm-modal" role="dialog" aria-modal="true" style="background:var(--blue-pastel-soft); border-color:#c3d7f0;">
+        <h3 style="color:var(--lilac-dark); font-size: 24px;">${title}</h3>
+        <p style="color:var(--muted);">${message}</p>
+        <div class="confirm-btns">
+            <button class="btn btn-primary" onclick="this.closest('.modal-backdrop').remove()">Aceptar</button>
+        </div>
+    </div>`;
+    document.body.appendChild(backdrop);
+}
+
 async function sendOrder(){   
 if(!cart.length){showToast("Tu carrito está vacío.");return;}   
 const name=$("#customer-name")?.value.trim(),email=$("#customer-email")?.value.trim(),phone=$("#customer-phone")?.value.trim(),address=$("#customer-address")?.value.trim(),comment=$("#customer-comment")?.value.trim();   
@@ -211,10 +226,10 @@ const response=await fetch(cfg.appsScriptUrl,{method:"POST",headers:{"Content-Ty
 if(!response.ok)throw new Error("El servidor no ha aceptado la solicitud.");   
 const result=await response.json();   
 if(result.status!=="success")throw new Error(result.message||"No se ha podido registrar el pedido.");   
-cart=[];updateCart();closeCart();$("#order-form")?.reset();   
-alert("Tu solicitud se ha registrado correctamente. Silvia se pondrá en contacto contigo para confirmar los detalles y el pago por Bizum.");   
+cart=[];updateCart();closeCart();$("#order-form")?.reset();$("#back-to-cart")?.click();   
+showCustomAlert("¡Solicitud enviada!", "Tu solicitud se ha registrado correctamente. Silvia se pondrá en contacto contigo para confirmar los detalles y el pago por Bizum.");   
 }catch(err){   
-alert("No hemos podido verificar el registro de tu solicitud. No se ha vaciado tu carrito. Puedes intentarlo de nuevo más tarde o escribir a "+cfg.email+". Detalle: "+err.message);   
+showCustomAlert("Hubo un problema", "No hemos podido verificar el registro de tu solicitud. No se ha vaciado tu carrito. Puedes intentarlo de nuevo más tarde o escribir a "+cfg.email+". Detalle: "+err.message);   
 }finally{btn.disabled=false;btn.textContent="Enviar solicitud de pedido";}   
 }   
   
@@ -241,9 +256,40 @@ document.addEventListener("input",e=>{const el=e.target.closest("[data-comment]"
 $("#modal-add")?.addEventListener("click",()=>{if(modalProduct){const p=products.find(x=>x.name===modalProduct.name);if(p)addProduct(p);closeProduct();}});   
 $("#continue-order")?.addEventListener("click",()=>{   
 if(!cart.length){showToast("Añade algún producto primero.");return;}   
-const drawer=$(".cart-drawer");drawer.innerHTML=`<div class="drawer-head"><div><span class="eyebrow">Un último paso</span><h2>Datos de tu solicitud</h2></div><button type="button" class="icon-button" data-close-cart aria-label="Cerrar">×</button></div>   
-<form id="order-form" class="form-card" style="overflow:auto;margin-top:15px;padding:20px"><label>Nombre *<input id="customer-name" required autocomplete="name"></label><label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email"></label><label>Teléfono *<input id="customer-phone" required inputmode="numeric" pattern="[0-9]{9}" maxlength="9" oninput="this.value=this.value.replace(/[^0-9]/g,'')" title="El teléfono debe tener exactamente 9 dígitos" autocomplete="tel"></label><label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address"></textarea></label><label>Comentario general<textarea id="customer-comment" rows="3"></textarea></label><p class="small-note">El importe mostrado es estimado y no incluye los gastos de envío. En esta etapa no se realizará ningún cargo; Silvia contactará contigo para confirmar los detalles y el importe definitivo.<br><br><strong style="color:var(--pink-dark)">Nota importante:</strong> Actualmente solo realizamos envíos dentro de la Península.</p><button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button></form>`;   
-$("#order-form").addEventListener("submit",e=>{e.preventDefault();sendOrder();});   
+let checkoutView = $("#checkout-view");
+if(!checkoutView){
+    checkoutView = document.createElement("div");
+    checkoutView.id = "checkout-view";
+    checkoutView.style.display = "none";
+    checkoutView.style.flex = "1";
+    checkoutView.style.overflow = "auto";
+    checkoutView.innerHTML = `
+        <div style="margin-bottom:15px;"><button type="button" class="text-button" id="back-to-cart" style="font-size:14.5px;">← Volver al carrito</button></div>
+        <form id="order-form" class="form-card" style="padding:20px; background:var(--pink-soft); border-color:#f0d5e1;">
+            <label>Nombre *<input id="customer-name" required autocomplete="name" style="background:var(--lilac-card); border-color:#dfceeb;"></label>
+            <label>Correo electrónico *<input id="customer-email" type="email" required autocomplete="email" style="background:var(--lilac-card); border-color:#dfceeb;"></label>
+            <label>Teléfono *<input id="customer-phone" required inputmode="numeric" pattern="[0-9]{9}" maxlength="9" oninput="this.value=this.value.replace(/[^0-9]/g,'')" title="El teléfono debe tener exactamente 9 dígitos" autocomplete="tel" style="background:var(--lilac-card); border-color:#dfceeb;"></label>
+            <label>Dirección de envío *<textarea id="customer-address" rows="2" required autocomplete="street-address" style="background:var(--lilac-card); border-color:#dfceeb;"></textarea></label>
+            <label>Comentario general<textarea id="customer-comment" rows="3" style="background:var(--lilac-card); border-color:#dfceeb;"></textarea></label>
+            <p class="small-note">El importe mostrado es estimado y no incluye los gastos de envío. En esta etapa no se realizará ningún cargo; Silvia contactará contigo para confirmar los detalles y el importe definitivo.<br><br><strong style="color:var(--pink-dark)">Nota importante:</strong> Actualmente solo realizamos envíos dentro de la Península.</p>
+            <button class="btn btn-primary full-width" id="submit-order" type="submit">Enviar solicitud de pedido</button>
+        </form>
+    `;
+    $(".cart-drawer").appendChild(checkoutView);
+    $("#order-form").addEventListener("submit",e=>{e.preventDefault();sendOrder();});
+    $("#back-to-cart").addEventListener("click",()=>{
+        $("#checkout-view").style.display = "none";
+        $("#cart-items").style.display = "";
+        $(".cart-summary").style.display = "block";
+        $(".drawer-head h2").textContent = "Mi carrito";
+        $(".drawer-head .eyebrow").textContent = "Tus favoritos";
+    });
+}
+$("#cart-items").style.display = "none";
+$(".cart-summary").style.display = "none";
+checkoutView.style.display = "block";
+$(".drawer-head h2").textContent = "Datos de tu solicitud";
+$(".drawer-head .eyebrow").textContent = "Un último paso";
 });   
 $("#contact-form")?.addEventListener("submit",sendContact);   
 $("#year").textContent=new Date().getFullYear();initMenu();updateCart();   
