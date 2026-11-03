@@ -69,14 +69,18 @@
     let price="";
     if(isProduct){
       if(p.stock<=0) price='<span class="stock-out">Agotado</span>';
-      else price=`<span class="price">${p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del> <strong class="offer-price">${euro(p.offerPrice)}</strong>`:euro(p.price)}${p.stock<=5?'<small class="low-stock">Pocas unidades</small>':""}</span>`;
+      else price=`<span class="price">${p.offer&&p.offerPrice!==undefined?`<del>${euro(p.price)}</del><strong class="offer-price">${euro(p.offerPrice)}</strong>`:euro(p.price)}${p.stock<=5?'<small class="low-stock">Pocas unidades</small>':""}</span>`;
     }
     const featured=p.featured?'<span class="featured-label">Destacado</span>':'';
+    const offer=isProduct&&p.offer?'<span class="offer-label">Oferta</span>':'';
     const classes=["item-card",kind==="gallery"?"gallery-card":"",p.featured?"is-featured":"",isProduct&&p.offer?"is-offer":""].filter(Boolean).join(" ");
-    return `<article class="${classes}" data-card-kind="${kind}" data-index="${index}" tabindex="0" role="group" aria-label="Ver detalle de ${esc(p.name||p.title)}">
-      ${featured}
-      ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy">`:`<div class="item-image placeholder" aria-hidden="true">✿</div>`}
-      <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p><div class="item-bottom">${isProduct?price:''}<span class="mini-btn detail-link">Ver detalle</span>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div></div></article>`;
+    return `<article class="${classes}" data-card-kind="${kind}" data-index="${index}" tabindex="0" role="group" aria-label="${esc(p.name||p.title)}. Pulsa para ver el detalle">
+      ${featured}${offer}
+      ${image?`<img class="item-image" src="${esc(image)}" alt="${esc(p.name||p.title)}" loading="lazy" draggable="false">`:`<div class="item-image placeholder" aria-hidden="true">✿</div>`}
+      <div class="item-content"><h3>${esc(p.name||p.title)}</h3><p>${esc(desc)}</p>
+        ${isProduct?`<div class="item-meta">${price}</div>`:''}
+        <div class="item-actions"><button class="mini-btn detail-button" type="button" data-detail-card="${kind}" data-index="${index}">Ver detalle</button>${isProduct?`<button class="mini-btn add-button" type="button" data-add="${index}" ${p.stock<=0?"disabled":""}>Añadir ♡</button>`:''}</div>
+      </div></article>`;
   }
   async function loadProducts(){
     const rows=await getSheet("CATALOGO");
@@ -126,12 +130,37 @@
       alert("No hemos podido verificar el registro de tu solicitud. No se ha vaciado tu carrito. Puedes intentarlo de nuevo más tarde o escribir a "+cfg.email+". Detalle: "+err.message);
     }finally{btn.disabled=false;btn.textContent="Enviar solicitud de pedido";}
   }
+  // Permite arrastrar desde cualquier tarjeta del carrusel, con ratón o pantalla táctil.
+  let activeDrag=null, suppressSliderClickUntil=0;
+  document.addEventListener("pointerdown",e=>{
+    const grid=e.target.closest(".has-slider");
+    if(!grid||e.button!==0||e.target.closest("button,a,input,textarea,select"))return;
+    const cardEl=e.target.closest("[data-card-kind]");
+    if(!cardEl)return;
+    activeDrag={grid,card:cardEl,startX:e.clientX,startY:e.clientY,lastX:e.clientX,dragging:false};
+    try{cardEl.setPointerCapture(e.pointerId);}catch{}
+  },{passive:true});
+  document.addEventListener("pointermove",e=>{
+    if(!activeDrag)return;
+    const dx=e.clientX-activeDrag.startX,dy=e.clientY-activeDrag.startY;
+    if(!activeDrag.dragging&&Math.abs(dx)>6&&Math.abs(dx)>Math.abs(dy)*1.15)activeDrag.dragging=true;
+    if(activeDrag.dragging){activeDrag.grid.scrollLeft-=e.clientX-activeDrag.lastX;e.preventDefault();}
+    activeDrag.lastX=e.clientX;
+  },{passive:false});
+  const finishSliderDrag=()=>{if(activeDrag?.dragging)suppressSliderClickUntil=Date.now()+350;activeDrag=null;};
+  document.addEventListener("pointerup",finishSliderDrag,{passive:true});
+  document.addEventListener("pointercancel",finishSliderDrag,{passive:true});
+  document.addEventListener("click",e=>{
+    if(Date.now()<suppressSliderClickUntil&&e.target.closest(".has-slider")){e.preventDefault();e.stopImmediatePropagation();return;}
+  },true);
   document.addEventListener("click",e=>{
     if(e.target.closest("[data-open-cart]"))openCart();
     if(e.target.closest("[data-close-cart]"))closeCart();
     const add=e.target.closest("[data-add]");if(add){e.stopPropagation();addProduct(products[Number(add.dataset.add)]);return;}
+    const detail=e.target.closest("[data-detail-card]");
+    if(detail){const i=Number(detail.dataset.index),kind=detail.dataset.detailCard;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");return;}
     const cardEl=e.target.closest("[data-card-kind]");
-    if(cardEl&&!e.target.closest("button")){const i=Number(cardEl.dataset.index),kind=cardEl.dataset.cardKind;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");}
+    if(cardEl&&!e.target.closest("button")){const i=Number(cardEl.dataset.index),kind=cardEl.dataset.cardKind;openProduct(kind==="product"?products[i]:kind==="specialty"?specialties[i]:gallery[i],kind==="product");return;}
     const qty=e.target.closest("[data-qty]");if(qty){const item=cart[Number(qty.dataset.index)];item.qty=Math.max(1,item.qty+Number(qty.dataset.qty));const p=products.find(x=>x.name===item.name);if(p)item.qty=Math.min(item.qty,p.stock);updateCart();}
     const rem=e.target.closest("[data-remove]");if(rem){cart.splice(Number(rem.dataset.remove),1);updateCart();}
     if(e.target.closest("[data-close-modal]")||e.target.id==="product-modal")closeProduct();
